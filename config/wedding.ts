@@ -104,7 +104,6 @@ export const weddingConfig = {
       time: "6:00 PM onwards",
       location: "Al Saj Mini Comet Hall",
       addressDetails: "Kazhakootam, Trivandrum (Tvm), Kerala",
-      dressCode: "Festive Formal / Ethnic Elegance",
       // TODO: add exact Google Maps link for Al Saj Mini Comet Hall
       googleMapsUrl: "https://maps.google.com/?q=Al+Saj+Mini+Comet+Hall+Kazhakootam+Trivandrum",
       image: "/images/event-reception.jpg",
