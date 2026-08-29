@@ -1,4 +1,4 @@
-﻿export interface WeddingEvent {
+export interface WeddingEvent {
   id: string;
   name: string;
   date: string; // ISO format YYYY-MM-DD
@@ -74,11 +74,12 @@ export const weddingConfig = {
     {
       id: "sangeeth",
       name: "Sangeeth Ceremony",
-      date: "2027-02-09", // Monday (dynamic)
+      date: "2027-02-09",
       time: "6:00 PM – 9:00 PM",
       location: "Bride's Home, Alalimadathil",
       addressDetails: "Alalimadathil House, Trivandrum, Kerala",
       dressCode: "Indian Ethnic Wear Only",
+      googleMapsUrl: "https://goo.gl/maps/WWByjNQwqjKxoWAs5?g_st=aw",
       image: "/images/event-sangeeth.jpg",
       iconName: "sparkles",
       description: "An evening filled with music, dance, laughter, and celebratory festive Indian ethnic attire.",
@@ -86,12 +87,11 @@ export const weddingConfig = {
     {
       id: "wedding",
       name: "Wedding Ceremony",
-      date: "2027-02-11", // Wednesday (dynamic)
+      date: "2027-02-11",
       time: "11:30 AM onwards",
       muhurthamTime: "12:10 PM – 12:34 PM",
       location: "Oryx Convention Centre",
       addressDetails: "Oryx Convention Centre, kayamkulam , Kerala",
-      // TODO: add exact Google Maps link for Oryx Convention Centre
       googleMapsUrl: "https://maps.app.goo.gl/PsknWMtZVRTJen1v6",
       image: "/images/event-wedding.jpg",
       iconName: "ring",
@@ -100,12 +100,11 @@ export const weddingConfig = {
     {
       id: "reception",
       name: "Wedding Reception",
-      date: "2027-02-12", // Thursday (dynamic)
+      date: "2027-02-12",
       time: "6:00 PM onwards",
       location: "Al Saj Mini Comet Hall",
       addressDetails: "Kazhakootam, Trivandrum (Tvm), Kerala",
-      // TODO: add exact Google Maps link for Al Saj Mini Comet Hall
-      googleMapsUrl: "https://maps.google.com/?q=Al+Saj+Mini+Comet+Hall+Kazhakootam+Trivandrum",
+      googleMapsUrl: "https://maps.app.goo.gl/4o78spCE4tUZkQZ48",
       image: "/images/event-reception.jpg",
       iconName: "glass",
       description: "A grand celebratory evening dinner to share joy and toast to our newly wedded journey.",
