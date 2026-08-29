@@ -58,7 +58,7 @@ export const weddingConfig = {
   // Countdown target date: Wedding Ceremony Muhurtham (Feb 11, 2027, 12:10 PM)
   countdownTargetDate: "2027-02-11T12:10:00",
   mainWeddingDate: "February 11, 2027",
-  weddingLocationShort: "TRIVANDRUM, KERALA",
+  weddingLocationShort: "KAYAMKULAM, KERALA",
   rsvpDeadline: "January 26, 2027",
 
   // Editorial Copy
