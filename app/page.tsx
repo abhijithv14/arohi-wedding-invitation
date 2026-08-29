@@ -1,12 +1,10 @@
-﻿import React from "react";
+import React from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Countdown from "@/components/Countdown";
 import Events from "@/components/Events";
 import OurStory from "@/components/OurStory";
 import FavoriteMoments from "@/components/FavoriteMoments";
-import TravelStay from "@/components/TravelStay";
-import FAQ from "@/components/FAQ";
 import LocationSection from "@/components/LocationSection";
 import Footer from "@/components/Footer";
 import MusicToggle from "@/components/MusicToggle";
@@ -33,22 +31,16 @@ export default function Home() {
       {/* 6. Photo Gallery / Favorite Moments */}
       <FavoriteMoments />
 
-      {/* 7. Travel & Stay */}
-      <TravelStay />
-
-      {/* 8. Frequently Asked Questions */}
-      <FAQ />
-
-      {/* 9. Location, Dress Code & RSVP */}
+      {/* 7. Location & RSVP */}
       <LocationSection />
 
-      {/* 10. Cinematic Final Footer */}
+      {/* 8. Cinematic Final Footer */}
       <Footer />
 
-      {/* 11. Floating Background Music Player */}
+      {/* 9. Floating Background Music Player */}
       <MusicToggle />
 
-      {/* 12. Floating Scroll To Top Button */}
+      {/* 10. Floating Scroll To Top Button */}
       <ScrollToTop />
     </main>
   );
