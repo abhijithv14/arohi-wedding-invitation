@@ -55,7 +55,7 @@ export default function Countdown() {
   ];
 
   return (
-    <section id="countdown" className="py-20 bg-[#FAF7F2] border-b border-[#E8E3DA] overflow-hidden">
+    <section id="countdown" className="py-20 bg-[#F8EFE8] border-b border-[#DCC7B8] overflow-hidden">
       <div className="max-w-5xl mx-auto px-6 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -72,12 +72,12 @@ export default function Countdown() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.15 }}
-                className="flex flex-col items-center justify-center p-6 bg-white/70 rounded-2xl shadow-sm border border-[#EBE6DC]"
+                className="flex flex-col items-center justify-center p-6 bg-[#FFFDFC]/75 rounded-2xl shadow-sm border border-[#DECABD]"
               >
-                <span className="font-serif text-4xl sm:text-5xl lg:text-6xl font-light text-[#2C2723]">
+                <span className="font-serif text-4xl sm:text-5xl lg:text-6xl font-light text-[#5A382C]">
                   {mounted ? String(unit.value).padStart(2, "0") : "00"}
                 </span>
-                <span className="mt-3 text-[10px] sm:text-xs tracking-[0.25em] font-medium text-[#7A7469]">
+                <span className="mt-3 text-[10px] sm:text-xs tracking-[0.25em] font-medium text-[#896B5B]">
                   {unit.label}
                 </span>
               </motion.div>
@@ -90,9 +90,9 @@ export default function Countdown() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="mt-12 font-script text-3xl sm:text-4xl text-[#5C5549] tracking-wide"
+            className="mt-12 font-script text-3xl sm:text-4xl text-[#704A3A] tracking-wide"
           >
-            {isPast ? 'Celebrating Our Wedding Day ♡' : 'until we say &quot;I do&quot; ♡'}
+            {isPast ? "Celebrating Our Wedding Day ♡" : "Until we start our forever ♾️"}
           </motion.p>
         </motion.div>
       </div>
