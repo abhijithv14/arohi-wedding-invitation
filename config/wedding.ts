@@ -44,22 +44,24 @@ export interface FAQItem {
 }
 
 export const weddingConfig = {
+  // Couple Information
   bride: {
-    name: "Arohi",
-    shortName: "Arohi",
+    name: "Aparna Jayakumar",
+    shortName: "Aparna",
   },
   groom: {
-    // Groom Name — TBD, placeholder "Partner Name" until confirmed
-    name: "Partner Name",
-    shortName: "Partner",
+    name: "Rohit S Kumar",
+    shortName: "Rohit",
   },
-  initials: "A + P",
+  initials: "A + R",
 
-  countdownTargetDate: "2026-02-09T18:00:00",
+  // Countdown target date: Wedding Ceremony Muhurtham (Feb 11, 2026, 12:10 PM)
+  countdownTargetDate: "2026-02-11T12:10:00",
   mainWeddingDate: "February 11, 2026",
   weddingLocationShort: "TRIVANDRUM, KERALA",
   rsvpDeadline: "January 26, 2026",
 
+  // Editorial Copy
   tagline: "ARE GETTING MARRIED",
   heroSubtitle: "We invite you to join us in celebrating our wedding story",
   storyHeading: "Every chapter has led us here.",
@@ -72,7 +74,7 @@ export const weddingConfig = {
     {
       id: "sangeeth",
       name: "Sangeeth Ceremony",
-      date: "2026-02-09",
+      date: "2026-02-09", // Monday (dynamic)
       time: "6:00 PM – 9:00 PM",
       location: "Bride's Home, Alalimadathil",
       addressDetails: "Alalimadathil House, Trivandrum, Kerala",
@@ -84,7 +86,7 @@ export const weddingConfig = {
     {
       id: "wedding",
       name: "Wedding Ceremony",
-      date: "2026-02-11",
+      date: "2026-02-11", // Wednesday (dynamic)
       time: "11:30 AM onwards",
       muhurthamTime: "12:10 PM – 12:34 PM",
       location: "Oryx Convention Centre",
@@ -94,12 +96,12 @@ export const weddingConfig = {
       googleMapsUrl: "https://maps.google.com/?q=Oryx+Convention+Centre+Trivandrum",
       image: "/images/event-wedding.jpg",
       iconName: "ring",
-      description: "The sacred wedding ceremony and Muhurtham followed by traditional feast and blessings.",
+      description: "The sacred wedding ceremony and Muhurtham (12:10 PM – 12:34 PM) followed by traditional feast and blessings.",
     },
     {
       id: "reception",
       name: "Wedding Reception",
-      date: "2026-02-12",
+      date: "2026-02-12", // Thursday (dynamic)
       time: "6:00 PM onwards",
       location: "Al Saj Mini Comet Hall",
       addressDetails: "Kazhakootam, Trivandrum (Tvm), Kerala",
@@ -147,7 +149,7 @@ export const weddingConfig = {
     {
       id: "g1",
       src: "/images/gallery-1.jpg",
-      alt: "Arohi & Partner moments",
+      alt: "Aparna & Rohit moments",
       title: "Embracing the Evening Sun",
       caption: "A quiet moment by the water as the dusk settles.",
     },
@@ -226,5 +228,5 @@ export const weddingConfig = {
   ] as FAQItem[],
 
   footerText: "We can't wait to celebrate with you.",
-  contactEmail: "celebrate@arohi-wedding.com",
+  contactEmail: "celebrate@aparna-rohit.com",
 };

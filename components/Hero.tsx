@@ -14,7 +14,7 @@ export default function Hero() {
       const now = new Date().getTime();
       const difference = target - now;
       if (difference > 0) {
-        setDaysLeft(Math.floor(difference / (1000 * 60 * 60 * 24)));
+        setDaysLeft(Math.ceil(difference / (1000 * 60 * 60 * 24)));
       } else {
         setDaysLeft(0);
       }
@@ -54,7 +54,7 @@ export default function Hero() {
         >
           {/* Handwritten Couple Names */}
           <h1 className="font-script text-6xl sm:text-7xl lg:text-8xl text-[#FAF7F2] font-normal leading-tight drop-shadow-lg tracking-wide">
-            {weddingConfig.bride.name} <span className="font-serif font-light text-4xl sm:text-5xl opacity-90 mx-1">+</span> {weddingConfig.groom.name}
+            {weddingConfig.bride.shortName} <span className="font-serif font-light text-4xl sm:text-5xl opacity-90 mx-1">+</span> {weddingConfig.groom.shortName}
           </h1>
 
           {/* Subtitle Label */}
@@ -86,13 +86,15 @@ export default function Hero() {
           className="mt-12 md:mt-0 bg-white/10 backdrop-blur-md border border-white/20 p-8 rounded-2xl text-center shadow-2xl min-w-[220px]"
         >
           <div className="font-serif text-5xl sm:text-6xl font-light text-amber-100 drop-shadow">
-            {daysLeft !== null ? daysLeft : "--"}
+            {daysLeft !== null ? (daysLeft > 0 ? daysLeft : 0) : "--"}
           </div>
           <div className="mt-2 text-[10px] sm:text-xs tracking-[0.25em] text-stone-200 uppercase font-medium">
-            Days Left
+            {daysLeft !== null && daysLeft > 0 ? "DAYS LEFT" : "SPECIAL DAY"}
           </div>
           <div className="mt-3 text-xs tracking-[0.15em] text-stone-300 font-serif italic">
-            Until we say &quot;I do&quot; ♡
+            {daysLeft !== null && daysLeft > 0
+              ? 'Until we say "I do" ♡'
+              : 'Celebrating Our Wedding Day ♡'}
           </div>
         </motion.div>
       </div>

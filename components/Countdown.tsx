@@ -19,6 +19,7 @@ export default function Countdown() {
     seconds: 0,
   });
   const [mounted, setMounted] = useState(false);
+  const [isPast, setIsPast] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -28,6 +29,7 @@ export default function Countdown() {
       const difference = target - now;
 
       if (difference > 0) {
+        setIsPast(false);
         setTimeLeft({
           days: Math.floor(difference / (1000 * 60 * 60 * 24)),
           hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
@@ -35,6 +37,7 @@ export default function Countdown() {
           seconds: Math.floor((difference / 1000) % 60),
         });
       } else {
+        setIsPast(true);
         setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
       }
     };
@@ -89,7 +92,7 @@ export default function Countdown() {
             transition={{ duration: 0.8, delay: 0.6 }}
             className="mt-12 font-script text-3xl sm:text-4xl text-[#5C5549] tracking-wide"
           >
-            until we say &quot;I do&quot; ♡
+            {isPast ? 'Celebrating Our Wedding Day ♡' : 'until we say &quot;I do&quot; ♡'}
           </motion.p>
         </motion.div>
       </div>
