@@ -1,36 +1,116 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+﻿# Arohi & Partner — Modern Wedding Invitation Website
 
-## Getting Started
+A luxury, modern, editorial wedding invitation website built with Next.js 14 (App Router), TypeScript, Tailwind CSS, Framer Motion, and Lucide Icons.
 
-First, run the development server:
+Designed with a high-end magazine aesthetic featuring cream/ivory tones, dynamic live countdowns, staggered entrance animations, custom lightbox photo gallery, interactive RSVP API, background music player, and single-file content editability.
 
+---
+
+## 🚀 Quick Start
+
+### 1. Install Dependencies
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Run Development Server
+```bash
+npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the live invitation website.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Production Build & Test
+```bash
+npm run build
+npm run start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 📝 How to Edit Wedding Information
 
-To learn more about Next.js, take a look at the following resources:
+All wedding details (couple names, wedding dates, countdown target, event details, story narrative, Google Maps links, FAQs, dress codes, and social links) are centrally stored in a single configuration file:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+/config/wedding.ts
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Changing Couple Names
+Edit `bride` and `groom` objects in `/config/wedding.ts`:
+```typescript
+bride: {
+  name: "Arohi",
+  shortName: "Arohi",
+},
+groom: {
+  name: "Partner Name", // Update with confirmed groom name
+  shortName: "Partner",
+},
+initials: "A + P",
+```
 
-## Deploy on Vercel
+### Updating Event Dates & Locations
+Update the `events` array in `/config/wedding.ts`:
+- **Weekdays are automatically computed dynamically** from the `date` string (`YYYY-MM-DD`). You never need to hardcode weekdays!
+- **Google Maps links**: Update `googleMapsUrl` for each event.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Updating Countdown Target Date
+Set the `countdownTargetDate` field in `/config/wedding.ts`:
+```typescript
+countdownTargetDate: "2026-02-09T18:00:00",
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 🖼️ How to Add or Replace Photographs
+
+Place your high-resolution photographs inside `/public/images/`:
+
+- `hero.jpg`: Hero background couple photograph
+- `story-1.jpg` to `story-4.jpg`: Our Story polaroid photo collage
+- `event-sangeeth.jpg`, `event-wedding.jpg`, `event-reception.jpg`: Event cards
+- `gallery-1.jpg` to `gallery-5.jpg`: Cinematic photo gallery & lightbox
+- `footer.jpg`: Closing banner photograph
+- `og-image.jpg`: Open Graph preview thumbnail for social media sharing
+
+---
+
+## 🎵 How to Change Background Music
+
+Replace the audio track at:
+```
+/public/audio/background-music.mp3
+```
+with your chosen MP3 track (ideally under 3MB for optimal mobile loading).
+
+> **Browser Autoplay Compliance**: Modern browsers block audio autoplay with sound. The music player stays paused initially and can be toggled by guests using the floating music button at the bottom-right of the page.
+
+---
+
+## ✉️ RSVP Functionality
+
+RSVP submissions hit the Next.js API route `/api/rsvp`.
+- Submissions are validated server-side.
+- Submissions are logged safely to server logs and written to `data/rsvps.json`.
+- **Database Integration**: To connect Supabase, MongoDB, or Firebase, simply update `app/api/rsvp/route.ts` with your database client.
+
+---
+
+## ⚡ Vercel Deployment
+
+This project is 100% Vercel-ready.
+
+1. Push your repository to GitHub.
+2. Import the repository in [Vercel](https://vercel.com).
+3. Vercel will automatically detect Next.js and build with zero extra setup.
+
+---
+
+## 🔒 Environment Variables
+
+Copy `.env.example` to `.env.local` for custom deployment configurations:
+
+```env
+# Optional environment variables
+NEXT_PUBLIC_SITE_URL=https://arohi-wedding.vercel.app
+```
