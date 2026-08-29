@@ -105,7 +105,14 @@ export default function EventCard({ event, index }: EventCardProps) {
             </p>
           )}
 
-         
+          {/* Dress Code - Sangeeth only */}
+          {event.id === "sangeeth" && event.dressCode && (
+            <p className="mt-4 text-xs tracking-wider text-[#665F55] italic">
+              <span className="font-semibold non-italic">Dress Code:</span>{" "}
+              {event.dressCode}
+            </p>
+          )}
+        </div>
 
         {/* Action Button */}
         {event.googleMapsUrl && (
