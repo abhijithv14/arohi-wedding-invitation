@@ -10,8 +10,8 @@
   }
 
   body {
-    background-color: #FAF7F2;
-    color: #2C2723;
+    background-color: #F8EFE8;
+    color: #5A382C;
     font-family: var(--font-sans);
   }
 
@@ -32,17 +32,23 @@
   font-family: var(--font-sans), sans-serif !important;
 }
 
+/* Warm Brown Wedding Palette */
+::selection {
+  background: #D8A98A;
+  color: #3B2922;
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #FAF7F2;
+  background: #F3E5DB;
 }
 ::-webkit-scrollbar-thumb {
-  background: #D4CEBF;
+  background: #B98D76;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #A39C90;
+  background: #89624F;
 }
