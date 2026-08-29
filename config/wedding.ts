@@ -55,11 +55,11 @@ export const weddingConfig = {
   },
   initials: "A + R",
 
-  // Countdown target date: Wedding Ceremony Muhurtham (Feb 11, 2026, 12:10 PM)
-  countdownTargetDate: "2026-02-11T12:10:00",
-  mainWeddingDate: "February 11, 2026",
+  // Countdown target date: Wedding Ceremony Muhurtham (Feb 11, 2027, 12:10 PM)
+  countdownTargetDate: "2027-02-11T12:10:00",
+  mainWeddingDate: "February 11, 2027",
   weddingLocationShort: "TRIVANDRUM, KERALA",
-  rsvpDeadline: "January 26, 2026",
+  rsvpDeadline: "January 26, 2027",
 
   // Editorial Copy
   tagline: "ARE GETTING MARRIED",
@@ -74,7 +74,7 @@ export const weddingConfig = {
     {
       id: "sangeeth",
       name: "Sangeeth Ceremony",
-      date: "2026-02-09", // Monday (dynamic)
+      date: "2027-02-09", // Monday (dynamic)
       time: "6:00 PM – 9:00 PM",
       location: "Bride's Home, Alalimadathil",
       addressDetails: "Alalimadathil House, Trivandrum, Kerala",
@@ -86,7 +86,7 @@ export const weddingConfig = {
     {
       id: "wedding",
       name: "Wedding Ceremony",
-      date: "2026-02-11", // Wednesday (dynamic)
+      date: "2027-02-11", // Wednesday (dynamic)
       time: "11:30 AM onwards",
       muhurthamTime: "12:10 PM – 12:34 PM",
       location: "Oryx Convention Centre",
@@ -101,7 +101,7 @@ export const weddingConfig = {
     {
       id: "reception",
       name: "Wedding Reception",
-      date: "2026-02-12", // Thursday (dynamic)
+      date: "2027-02-12", // Thursday (dynamic)
       time: "6:00 PM onwards",
       location: "Al Saj Mini Comet Hall",
       addressDetails: "Kazhakootam, Trivandrum (Tvm), Kerala",
@@ -219,7 +219,7 @@ export const weddingConfig = {
     },
     {
       question: "By when should I submit my RSVP?",
-      answer: "Kindly reply by January 26, 2026 so we can finalize seating and catering arrangements for you.",
+      answer: "Kindly reply by January 26, 2027 so we can finalize seating and catering arrangements for you.",
     },
     {
       question: "Can I bring a plus one or my children?",
