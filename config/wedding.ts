@@ -90,10 +90,9 @@ export const weddingConfig = {
       time: "11:30 AM onwards",
       muhurthamTime: "12:10 PM – 12:34 PM",
       location: "Oryx Convention Centre",
-      addressDetails: "Oryx Convention Centre, Trivandrum, Kerala",
-      dressCode: "Traditional / Elegant Indian Attire",
+      addressDetails: "Oryx Convention Centre, kayamkulam , Kerala",
       // TODO: add exact Google Maps link for Oryx Convention Centre
-      googleMapsUrl: "https://maps.google.com/?q=Oryx+Convention+Centre+Trivandrum",
+      googleMapsUrl: "https://maps.app.goo.gl/PsknWMtZVRTJen1v6",
       image: "/images/event-wedding.jpg",
       iconName: "ring",
       description: "The sacred wedding ceremony and Muhurtham (12:10 PM – 12:34 PM) followed by traditional feast and blessings.",
