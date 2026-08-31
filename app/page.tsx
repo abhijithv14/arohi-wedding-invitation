@@ -15,11 +15,34 @@ import InvitationCover from "@/components/InvitationCover";
 
 export default function Home() {
   const [invitationOpened, setInvitationOpened] = useState(false);
+
   return (
     <main className="min-h-screen relative bg-[#FAF7F2] text-[#2C2723]">
-      {!invitationOpened && <InvitationCover onOpen={() => setInvitationOpened(true)} />}
-      <div aria-hidden={!invitationOpened} className={invitationOpened ? "" : "pointer-events-none"}>
-        <Navbar /><Hero /><Countdown /><Events /><OurStory /><FavoriteMoments /><LocationSection /><Footer /><MusicToggle /><ScrollToTop />
+      {/* Keep the cover mounted until its full curtain animation finishes. */}
+      <InvitationCover onOpen={() => setInvitationOpened(true)} />
+
+      <div
+        aria-hidden={!invitationOpened}
+        className={invitationOpened ? "" : "pointer-events-none"}
+      >
+        <Navbar />
+        <Hero />
+        <Countdown />
+        <Events />
+        <OurStory />
+        <FavoriteMoments />
+        <LocationSection />
+        <Footer />
+        <ScrollToTop />
+      </div>
+
+      {/* Mount the audio controller from the beginning so the cover click can
+          trigger playback through the browser's user-gesture allowance. */}
+      <div
+        className={invitationOpened ? "opacity-100" : "opacity-0 pointer-events-none"}
+        aria-hidden={!invitationOpened}
+      >
+        <MusicToggle />
       </div>
     </main>
   );
