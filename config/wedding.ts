@@ -33,8 +33,8 @@ export const weddingConfig = {
   storyParagraph2: "As we step into this beautiful new chapter, we are filled with gratitude to celebrate our union surrounded by the warmth of our beloved family and friends.",
   backgroundAudio: "/audio/background-music.mp3",
   events: [
-    { id: "sangeeth", name: "Sangeeth Ceremony", date: "2027-02-09", time: "6:00 PM – 9:00 PM", location: "Bride's Home, Alalimadathil", addressDetails: "Alalimadathil, Puthuppally P O, Kayamkulam, Kerala", dressCode: "Indian Ethnic Wear Only", googleMapsUrl: "https://goo.gl/maps/WWByjNQwqjKxoWAs5?g_st=aw", image: "/images/event-sangeeth.jpg", iconName: "sparkles", description: "An evening filled with music, dance, laughter, and celebratory festive Indian ethnic attire." },
-    { id: "wedding", name: "Wedding Ceremony", date: "2027-02-11", time: "11:30 AM onwards", muhurthamTime: "12:10 PM – 12:34 PM", location: "Oryx Convention Centre", addressDetails: "Oryx Convention Centre, Kayamkulam, Kerala", googleMapsUrl: "https://maps.app.goo.gl/PsknWMtZVRTJen1v6", image: "/images/event-wedding.jpg", iconName: "ring", description: "The sacred wedding ceremony and Muhurtham (12:10 PM – 12:34 PM) followed by traditional feast and blessings." },
+    { id: "sangeeth", name: "Sangeeth Ceremony", date: "2027-02-09", time: "6:00 PM – 9:00 PM", location: "Bride's Home", addressDetails: "Alalimadathil, Puthuppally P O, Kayamkulam, Kerala", dressCode: "Indian Ethnic Wear Only", googleMapsUrl: "https://goo.gl/maps/WWByjNQwqjKxoWAs5?g_st=aw", image: "/images/event-sangeeth.jpg", iconName: "sparkles", description: "An evening filled with music, dance, laughter, and celebratory festive Indian ethnic attire." },
+    { id: "wedding", name: "Wedding Ceremony", date: "2027-02-11", time: "11:30 AM onwards", muhurthamTime: "12:10 PM – 12:34 PM", location: "Oryx Convention Centre", addressDetails: "Oryx Convention Centre, Ochira, Kerala", googleMapsUrl: "https://maps.app.goo.gl/PsknWMtZVRTJen1v6", image: "/images/event-wedding.jpg", iconName: "ring", description: "The sacred wedding ceremony and Muhurtham (12:10 PM – 12:34 PM) followed by traditional feast and blessings." },
     { id: "reception", name: "Wedding Reception", date: "2027-02-12", time: "6:00 PM onwards", location: "Al Saj Mini Comet Hall", addressDetails: "Kazhakootam, Trivandrum (Tvm), Kerala", googleMapsUrl: "https://maps.app.goo.gl/4o78spCE4tUZkQZ48", image: "/images/event-reception.jpg", iconName: "glass", description: "A grand celebratory evening dinner to share joy and toast to our newly wedded journey." },
   ] as WeddingEvent[],
   storyMoments: [
@@ -49,6 +49,6 @@ export const weddingConfig = {
     { id: "g3", src: "/images/cute.jpg", alt: "Aparna and Rohit sharing a sweet moment", title: "Sweet Moments", caption: "The little moments that mean everything." },
     { id: "g4", src: "/images/childhood.jpg", alt: "Childhood memory", title: "A Memory to Treasure", caption: "A glimpse into the story behind us." },
   ] as GalleryPhoto[],
-  footerText: "We can't wait to celebrate with you.",
+  footerText: "With lots of love",
   contactEmail: "celebrate@aparna-rohit.com",
 };
