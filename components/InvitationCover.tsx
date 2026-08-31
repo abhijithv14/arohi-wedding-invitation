@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { weddingConfig } from "@/config/wedding";
 
 interface InvitationCoverProps { onOpen: () => void; }
 
@@ -16,8 +15,6 @@ export default function InvitationCover({ onOpen }: InvitationCoverProps) {
   }, [visible]);
 
   const openInvitation = () => {
-    // This click is a real browser user gesture. Notify the single audio
-    // player before removing the cover so mobile browsers can start playback.
     window.dispatchEvent(new Event("wedding:open"));
     setVisible(false);
     onOpen();
@@ -27,7 +24,7 @@ export default function InvitationCover({ onOpen }: InvitationCoverProps) {
   return <AnimatePresence>{visible && (
     <motion.div initial={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.9 }} className="fixed inset-0 z-[100] overflow-hidden bg-[#2A211D]">
       <motion.div initial={{ scale: 1.08 }} animate={{ scale: 1 }} transition={{ duration: 12, ease: "linear" }} className="absolute inset-0">
-        <Image src="/images/forever.jpg" alt="Aparna and Rohit" fill priority sizes="100vw" className="object-cover" />
+        <Image src="/images/forever2.jpg" alt="Aparna and Rohit" fill priority sizes="100vw" className="object-cover" />
       </motion.div>
       <div className="absolute inset-0 bg-[#211814]/45" />
       <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-transparent to-black/65" />
@@ -38,7 +35,6 @@ export default function InvitationCover({ onOpen }: InvitationCoverProps) {
           <motion.h1 initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .9 }} className="font-serif text-4xl sm:text-6xl font-light">Aparna <span className="text-[#E7CDBE]">+</span> Rohit</motion.h1>
           <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.15 }} className="mt-5 font-script text-2xl sm:text-3xl text-[#F2DED2]">to celebrate our forever</motion.p>
           <div className="mx-auto my-7 h-px w-16 bg-[#E7CDBE]/70" />
-          <p className="text-[10px] tracking-[.32em] uppercase text-white/85">{weddingConfig.mainWeddingDate} · Kerala</p>
           <motion.button type="button" initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.8 }} onClick={openInvitation} className="mt-10 rounded-full border border-[#F2DED2]/70 bg-[#FFF8F2]/95 px-8 py-3 text-[10px] tracking-[.3em] text-[#5D4034] shadow-2xl hover:bg-white hover:scale-105 transition">OPEN INVITATION · ♫</motion.button>
         </div>
       </div>
