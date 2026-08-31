@@ -2,13 +2,14 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { Music, Volume2, VolumeX } from "lucide-react";
+import { Music, VolumeX } from "lucide-react";
 import { weddingConfig } from "@/config/wedding";
 
 export default function MusicToggle() {
   const [isMuted, setIsMuted] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const mutedRef = useRef(false);
 
   useEffect(() => {
     const audio = new Audio(weddingConfig.backgroundAudio || "/audio/background-music.mp3");
@@ -22,32 +23,31 @@ export default function MusicToggle() {
     audio.addEventListener("play", handlePlay);
     audio.addEventListener("pause", handlePause);
 
-    // Try audible autoplay. Mobile browsers may reject this before a gesture.
-    audio.play().catch(() => undefined);
-
-    // If autoplay is blocked, use the first gesture anywhere on the page.
-    // This avoids requiring the visitor to press the music button just to start it.
-    const startOnGesture = () => {
-      if (!audio.paused || isMuted) return;
-      audio.play().catch(() => undefined);
-    };
-
-    const events: Array<keyof WindowEventMap> = ["pointerdown", "touchstart", "click", "keydown"];
-    events.forEach((event) => {
-      window.addEventListener(event, startOnGesture, { capture: true, passive: true });
-    });
-
     return () => {
-      events.forEach((event) => {
-        window.removeEventListener(event, startOnGesture, { capture: true });
-      });
       audio.removeEventListener("play", handlePlay);
       audio.removeEventListener("pause", handlePause);
       audio.pause();
       audio.src = "";
       audioRef.current = null;
     };
+  }, []);
+
+  useEffect(() => {
+    mutedRef.current = isMuted;
   }, [isMuted]);
+
+  // The invitation cover supplies the first user gesture. If autoplay was
+  // blocked, allow a later gesture to start music, but NEVER while muted.
+  useEffect(() => {
+    const startOnGesture = () => {
+      const audio = audioRef.current;
+      if (!audio || mutedRef.current || !audio.paused) return;
+      audio.play().catch(() => undefined);
+    };
+    const events: Array<keyof WindowEventMap> = ["pointerdown", "touchstart", "keydown"];
+    events.forEach((event) => window.addEventListener(event, startOnGesture, { capture: true, passive: true }));
+    return () => events.forEach((event) => window.removeEventListener(event, startOnGesture, { capture: true }));
+  }, []);
 
   const toggleMute = () => {
     const audio = audioRef.current;
@@ -59,7 +59,9 @@ export default function MusicToggle() {
       audio.play().catch(() => undefined);
     } else {
       audio.muted = true;
+      audio.pause();
       setIsMuted(true);
+      setIsPlaying(false);
     }
   };
 
@@ -72,20 +74,9 @@ export default function MusicToggle() {
         title={isMuted ? "Play music" : "Mute music"}
         whileHover={{ scale: 1.08 }}
         whileTap={{ scale: 0.92 }}
-        className={`w-12 h-12 rounded-full flex items-center justify-center shadow-2xl border backdrop-blur-md transition-all duration-300 ${
-          isMuted
-            ? "bg-white/95 text-[#3D3831] border-[#E8E3DA]"
-            : "bg-[#3D3831] text-amber-100 border-amber-300/40 ring-2 ring-amber-300/20"
-        }`}
+        className={`w-12 h-12 rounded-full flex items-center justify-center shadow-2xl border backdrop-blur-md transition-all duration-300 ${isMuted ? "bg-white/95 text-[#3D3831] border-[#E8E3DA]" : "bg-[#6B4638] text-[#FFF5EC] border-[#D8B49D]"}`}
       >
-        {isMuted || !isPlaying ? (
-          <VolumeX size={20} />
-        ) : (
-          <div className="relative flex items-center justify-center">
-            <Music size={20} className="animate-pulse" />
-            <Volume2 size={11} className="absolute -bottom-1 -right-1" />
-          </div>
-        )}
+        {isMuted || !isPlaying ? <VolumeX size={20} /> : <Music size={20} className="animate-pulse" />}
       </motion.button>
     </div>
   );
