@@ -1,7 +1,7 @@
 export interface WeddingEvent {
   id: string;
   name: string;
-  date: string; // ISO format YYYY-MM-DD
+  date: string;
   time: string;
   muhurthamTime?: string;
   location: string;
@@ -44,7 +44,6 @@ export interface FAQItem {
 }
 
 export const weddingConfig = {
-  // Couple Information
   bride: {
     name: "Aparna Jayakumar",
     shortName: "Aparna",
@@ -55,13 +54,11 @@ export const weddingConfig = {
   },
   initials: "A + R",
 
-  // Countdown target date: Wedding Ceremony Muhurtham (Feb 11, 2027, 12:10 PM)
   countdownTargetDate: "2027-02-11T12:10:00",
   mainWeddingDate: "February 11, 2027",
   weddingLocationShort: "KAYAMKULAM, KERALA",
   rsvpDeadline: "January 26, 2027",
 
-  // Editorial Copy
   tagline: "ARE GETTING MARRIED",
   heroSubtitle: "We invite you to join us in celebrating our wedding story",
   storyHeading: "Every chapter has led us here.",
@@ -91,7 +88,7 @@ export const weddingConfig = {
       time: "11:30 AM onwards",
       muhurthamTime: "12:10 PM – 12:34 PM",
       location: "Oryx Convention Centre",
-      addressDetails: "Oryx Convention Centre, kayamkulam , Kerala",
+      addressDetails: "Oryx Convention Centre, Kayamkulam, Kerala",
       googleMapsUrl: "https://maps.app.goo.gl/PsknWMtZVRTJen1v6",
       image: "/images/event-wedding.jpg",
       iconName: "ring",
@@ -114,30 +111,30 @@ export const weddingConfig = {
   storyMoments: [
     {
       id: "1",
-      caption: "the beginning",
+      caption: "childhood",
       title: "Where It All Began",
-      image: "/images/story-1.jpg",
+      image: "/images/childhood.jpg",
       rotation: "-rotate-3",
     },
     {
       id: "2",
-      caption: "adventures",
-      title: "Journeys Together",
-      image: "/images/story-2.jpg",
+      caption: "together",
+      title: "Our Favorite Moments",
+      image: "/images/couple1.jpg",
       rotation: "rotate-2",
     },
     {
       id: "3",
-      caption: "memories",
-      title: "Golden Sunsets",
-      image: "/images/story-3.jpg",
+      caption: "sweet moments",
+      title: "The Little Things",
+      image: "/images/cute.jpg",
       rotation: "-rotate-2",
     },
     {
       id: "4",
       caption: "forever",
-      title: "A Lifetime Ahead",
-      image: "/images/story-4.jpg",
+      title: "Holding On Forever",
+      image: "/images/forever.jpg",
       rotation: "rotate-3",
     },
   ] as StoryMoment[],
@@ -145,38 +142,31 @@ export const weddingConfig = {
   galleryPhotos: [
     {
       id: "g1",
-      src: "/images/gallery-1.jpg",
-      alt: "Aparna & Rohit moments",
-      title: "Embracing the Evening Sun",
-      caption: "A quiet moment by the water as the dusk settles.",
+      src: "/images/couple1.jpg",
+      alt: "Aparna and Rohit together",
+      title: "Together",
+      caption: "A moment we will always keep close.",
     },
     {
       id: "g2",
-      src: "/images/gallery-2.jpg",
-      alt: "Wedding preparations",
-      title: "Laughter & Promises",
-      caption: "Spontaneous smiles during our pre-wedding shoot.",
+      src: "/images/forever.jpg",
+      alt: "Aparna and Rohit holding hands",
+      title: "Holding On Forever",
+      caption: "Two hands, one beautiful journey.",
     },
     {
       id: "g3",
-      src: "/images/gallery-3.jpg",
-      alt: "Romantic stroll",
-      title: "Walking Hand in Hand",
-      caption: "Exploring coastal paths together in Trivandrum.",
+      src: "/images/cute.jpg",
+      alt: "Aparna and Rohit sharing a sweet moment",
+      title: "Sweet Moments",
+      caption: "The little moments that mean everything.",
     },
     {
       id: "g4",
-      src: "/images/gallery-4.jpg",
-      alt: "Sunset embrace",
-      title: "Under Golden Lights",
-      caption: "Warm evening lights reflecting festive spirits.",
-    },
-    {
-      id: "g5",
-      src: "/images/gallery-5.jpg",
-      alt: "Celebration joy",
-      title: "Together Always",
-      caption: "Looking forward to forever.",
+      src: "/images/childhood.jpg",
+      alt: "Childhood memory",
+      title: "A Memory to Treasure",
+      caption: "A glimpse into the story behind us.",
     },
   ] as GalleryPhoto[],
 
