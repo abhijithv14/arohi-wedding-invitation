@@ -13,6 +13,21 @@
     background-color: #F8EFE8;
     color: #5A382C;
     font-family: var(--font-sans);
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  body::-webkit-scrollbar {
+    display: none;
+  }
+
+  html {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  html::-webkit-scrollbar {
+    display: none;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -36,19 +51,4 @@
 ::selection {
   background: #D8A98A;
   color: #3B2922;
-}
-
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background: #F3E5DB;
-}
-::-webkit-scrollbar-thumb {
-  background: #B98D76;
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #89624F;
 }
