@@ -15,26 +15,24 @@ export default function Hero() {
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.1, delay: 0.35 }} className="max-w-3xl flex flex-col items-center">
           <p className="text-[10px] sm:text-xs tracking-[0.42em] text-[#F0D9CB] font-medium uppercase">Together with our families</p>
 
-          <motion.p initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.6 }} className="mt-6 font-script text-3xl sm:text-4xl text-[#F1D4C5]">
+          <motion.p initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.6 }} className="mt-6 font-script text-2xl sm:text-3xl text-[#F1D4C5]">
             Aparna + Rohit ♡
           </motion.p>
 
-          <h1 className="mt-7 font-serif text-5xl sm:text-6xl lg:text-8xl font-light leading-[0.95] tracking-wide text-[#FFF6EF] drop-shadow-xl">
+          <h1 className="mt-6 font-serif text-3xl sm:text-4xl lg:text-6xl font-light leading-[1] tracking-wide text-[#FFF6EF] drop-shadow-xl">
             WE <span className="block">ARE GETTING</span>
             <span className="block text-[#E5B99F]">MARRIED</span>
           </h1>
 
-          <div className="my-8 flex items-center justify-center gap-3 text-[#E0B39A]">
-            <span className="h-px w-12 bg-[#E0B39A]/55" />
-            <Heart size={14} className="fill-[#E0B39A]/80" />
-            <span className="h-px w-12 bg-[#E0B39A]/55" />
+          <div className="my-6 flex items-center justify-center gap-3 text-[#E0B39A]">
+            <span className="h-px w-10 bg-[#E0B39A]/55" />
+            <Heart size={13} className="fill-[#E0B39A]/80" />
+            <span className="h-px w-10 bg-[#E0B39A]/55" />
           </div>
 
-          <p className="text-xs sm:text-sm tracking-[0.35em] uppercase text-[#F0D9CB] font-medium">
-            February 11, 2026
-          </p>
+          <p className="text-xs sm:text-sm tracking-[0.35em] uppercase text-[#F0D9CB] font-medium">February 11, 2026</p>
 
-          <p className="mt-7 max-w-2xl text-sm sm:text-base lg:text-lg leading-8 font-light tracking-wide text-[#F5E8DF] drop-shadow-md">
+          <p className="mt-6 max-w-2xl text-sm sm:text-base leading-8 font-light tracking-wide text-[#F5E8DF] drop-shadow-md">
             We invite you to share in our joy as we begin this beautiful journey together.
             <br className="hidden sm:block" />
             Your love, blessings and presence mean the world to us.
