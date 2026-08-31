@@ -12,7 +12,7 @@ export default function Hero() {
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 1.8, ease: "easeOut" }}
         className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: "url('/images/homecover.jpg')", filter: "saturate(0.55) contrast(0.72)" }}
+        style={{ backgroundImage: "url('/images/couple1.jpg')", filter: "saturate(0.55) contrast(0.72)" }}
       >
         <div className="absolute inset-0 bg-[#5A3B2E]/68" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#4A3027]/58 via-[#5A3B2E]/64 to-[#3D2922]/74" />
