@@ -17,37 +17,32 @@ export default function MusicToggle() {
     audio.preload = "auto";
     audioRef.current = audio;
 
-    const onPlay = () => setIsPlaying(true);
-    const onPause = () => setIsPlaying(false);
-    audio.addEventListener("play", onPlay);
-    audio.addEventListener("pause", onPause);
+    const handlePlay = () => setIsPlaying(true);
+    const handlePause = () => setIsPlaying(false);
+    audio.addEventListener("play", handlePlay);
+    audio.addEventListener("pause", handlePause);
 
-    // Audible autoplay is controlled by the browser. Try immediately;
-    // if blocked, the first real user interaction starts the same audio.
-    const tryPlay = () => {
-      if (!audioRef.current || isMuted) return;
-      audioRef.current.play().catch(() => undefined);
+    // Try audible autoplay. Mobile browsers may reject this before a gesture.
+    audio.play().catch(() => undefined);
+
+    // If autoplay is blocked, use the first gesture anywhere on the page.
+    // This avoids requiring the visitor to press the music button just to start it.
+    const startOnGesture = () => {
+      if (!audio.paused || isMuted) return;
+      audio.play().catch(() => undefined);
     };
 
-    tryPlay();
-
-    const onFirstInteraction = () => {
-      tryPlay();
-      window.removeEventListener("pointerdown", onFirstInteraction);
-      window.removeEventListener("keydown", onFirstInteraction);
-      window.removeEventListener("touchstart", onFirstInteraction);
-    };
-
-    window.addEventListener("pointerdown", onFirstInteraction, { once: true });
-    window.addEventListener("keydown", onFirstInteraction, { once: true });
-    window.addEventListener("touchstart", onFirstInteraction, { once: true });
+    const events: Array<keyof WindowEventMap> = ["pointerdown", "touchstart", "click", "keydown"];
+    events.forEach((event) => {
+      window.addEventListener(event, startOnGesture, { capture: true, passive: true });
+    });
 
     return () => {
-      window.removeEventListener("pointerdown", onFirstInteraction);
-      window.removeEventListener("keydown", onFirstInteraction);
-      window.removeEventListener("touchstart", onFirstInteraction);
-      audio.removeEventListener("play", onPlay);
-      audio.removeEventListener("pause", onPause);
+      events.forEach((event) => {
+        window.removeEventListener(event, startOnGesture, { capture: true });
+      });
+      audio.removeEventListener("play", handlePlay);
+      audio.removeEventListener("pause", handlePause);
       audio.pause();
       audio.src = "";
       audioRef.current = null;
