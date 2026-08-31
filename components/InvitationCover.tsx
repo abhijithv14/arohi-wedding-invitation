@@ -27,7 +27,7 @@ export default function InvitationCover({ onOpen }: InvitationCoverProps) {
       initial={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.9, ease: "easeInOut" }}
-      className="fixed inset-0 z-[100] overflow-hidden bg-[#120805]"
+      className="fixed inset-0 z-[100] overflow-hidden bg-[#2A211D]"
     >
       <motion.div
         initial={{ scale: 1.08 }}
@@ -35,65 +35,64 @@ export default function InvitationCover({ onOpen }: InvitationCoverProps) {
         transition={{ duration: 12, ease: "linear" }}
         className="absolute inset-0"
       >
-        <Image
-          src="/images/forever2.jpg"
-          alt="Aparna and Rohit"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover"
-        />
+        <Image src="/images/forever2.jpg" alt="Aparna and Rohit" fill priority sizes="100vw" className="object-cover" />
       </motion.div>
+      <div className="absolute inset-0 bg-[#211814]/45" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-transparent to-black/65" />
 
-      {/* Rich brown cinematic overlay — dark enough for contrast without crushing the photo */}
-      <div className="absolute inset-0 bg-[#170B07]/58" />
-      <div className="absolute inset-0 bg-gradient-to-b from-[#0B0503]/45 via-[#24110B]/30 to-[#080302]/72" />
-
-      {/* One centered column keeps every element on the same visual axis */}
-      <div className="relative z-10 flex min-h-screen items-center justify-center px-5 text-center">
-        <div className="flex w-full max-w-xl flex-col items-center justify-center">
+      {/* All cover content shares one centered axis */}
+      <div className="relative z-10 flex min-h-screen w-full items-center justify-center px-6 text-center text-[#FFF8F2]">
+        <div className="flex w-full max-w-2xl flex-col items-center justify-center px-8 py-14 sm:px-16 sm:py-20">
           <motion.p
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: .35, duration: .7 }}
-            className="text-[9px] font-medium uppercase tracking-[.55em] text-[#D39A78]"
+            className="text-center text-[9px] font-medium uppercase tracking-[.55em] text-white/90"
           >
             You are invited
           </motion.p>
 
-          {/* Centered AR monogram */}
+          {/* A + R monogram from the requested design, centered independently of its letter widths */}
           <motion.div
-            initial={{ opacity: 0, scale: .84, y: 10 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
+            initial={{ opacity: 0, scale: .82 }}
+            animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: .55, duration: .9, ease: "easeOut" }}
-            className="mt-8 flex flex-col items-center"
+            className="relative mx-auto mt-8 h-32 w-40 sm:h-36 sm:w-44"
             aria-label="A R monogram"
           >
-            <div className="flex h-28 w-40 items-center justify-center">
-              <span className="font-serif text-[88px] font-semibold leading-none tracking-[-0.16em] text-[#8A4729] drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)] sm:text-[104px]">
-                AR
-              </span>
-            </div>
-            <span className="mt-2 block h-px w-20 bg-[#8A4729]/85" />
+            <span className="absolute left-1/2 top-1/2 -translate-x-[58%] -translate-y-1/2 font-serif text-[92px] font-light leading-none tracking-[-0.16em] text-[#F3D6C4] drop-shadow-lg sm:text-[108px]">A</span>
+            <span className="absolute left-1/2 top-1/2 translate-x-[2%] -translate-y-1/2 font-serif text-[92px] font-light leading-none tracking-[-0.16em] text-[#D8A98A]/95 drop-shadow-lg sm:text-[108px]">R</span>
+            <span className="absolute bottom-0 left-1/2 h-px w-14 -translate-x-1/2 bg-[#E7CDBE]/70" />
           </motion.div>
 
           <motion.p
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.05, duration: .8 }}
-            className="mt-7 font-script text-3xl leading-none text-[#D5A080] sm:text-4xl"
+            className="mt-6 text-center font-script text-3xl leading-none text-[#F2DED2] sm:text-4xl"
           >
             to celebrate our forever
           </motion.p>
 
+          <motion.div
+            initial={{ opacity: 0, scaleX: .2 }}
+            animate={{ opacity: 1, scaleX: 1 }}
+            transition={{ delay: 1.25, duration: .7 }}
+            className="mx-auto mt-7 mb-7 flex w-full items-center justify-center gap-3"
+          >
+            <span className="h-px w-10 bg-[#D8A98A]/55" />
+            <span className="text-xs text-[#E7CDBE]">♡</span>
+            <span className="h-px w-10 bg-[#D8A98A]/55" />
+          </motion.div>
+
           <motion.h1
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.35, duration: .8 }}
-            className="mt-8 font-serif text-4xl font-light tracking-wide text-[#F0E1D8] sm:text-6xl"
+            transition={{ delay: 1.4, duration: .8 }}
+            className="text-center font-serif text-4xl font-light tracking-wide text-[#FFF8F2] sm:text-6xl"
           >
             <span>Aparna</span>
-            <span className="mx-3 font-light text-[#A95F3A] sm:mx-5">+</span>
+            <span className="mx-3 font-light text-[#D8A98A] sm:mx-5">+</span>
             <span>Rohit</span>
           </motion.h1>
 
@@ -101,9 +100,9 @@ export default function InvitationCover({ onOpen }: InvitationCoverProps) {
             type="button"
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.8, duration: .7 }}
+            transition={{ delay: 1.85, duration: .7 }}
             onClick={openInvitation}
-            className="mt-12 rounded-full border border-[#B97855]/80 bg-[#A65E3B]/90 px-8 py-3 text-[10px] font-medium tracking-[.3em] text-[#FFF4ED] shadow-2xl transition hover:scale-105 hover:bg-[#B56B45]"
+            className="mt-12 rounded-full border border-[#F2DED2]/70 bg-[#FFF8F2]/95 px-8 py-3 text-[10px] tracking-[.3em] text-[#5D4034] shadow-2xl transition hover:scale-105 hover:bg-white"
           >
             OPEN INVITATION · ♫
           </motion.button>
