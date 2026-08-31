@@ -7,7 +7,7 @@ import { ChevronDown, Heart } from "lucide-react";
 export default function Hero() {
   return (
     <section id="home" className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-[#5A3B2E]">
-      <motion.div initial={{ scale: 1.05, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 1.8, ease: "easeOut" }} className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/images/homecover.jpg')", filter: "blur(3px) saturate(0.55) contrast(0.72)" }}>
+      <motion.div initial={{ scale: 1.05, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 1.8, ease: "easeOut" }} className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/images/couple1.jpg')", filter: "blur(3px) saturate(0.55) contrast(0.72)" }}>
         <div className="absolute inset-0 bg-[#5A3B2E]/30" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#4B3026]/18 via-[#6B4636]/20 to-[#3D2922]/38" />
         <div className="absolute inset-0 bg-[#3F2921]/18 sm:hidden" />
