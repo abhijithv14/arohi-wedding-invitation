@@ -40,28 +40,29 @@ export default function InvitationCover({ onOpen }: InvitationCoverProps) {
       <div className="absolute inset-0 bg-[#211814]/45" />
       <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-transparent to-black/65" />
 
-      {/* All cover content shares one centered axis */}
       <div className="relative z-10 flex min-h-screen w-full items-center justify-center px-6 text-center text-[#FFF8F2]">
         <div className="flex w-full max-w-2xl flex-col items-center justify-center px-8 py-14 sm:px-16 sm:py-20">
           <motion.p
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: .35, duration: .7 }}
-            className="text-center text-[9px] font-medium uppercase tracking-[.55em] text-white/90"
+            className="w-full text-center text-[9px] font-medium uppercase tracking-[.55em] text-white/90"
           >
             You are invited
           </motion.p>
 
-          {/* A + R monogram from the requested design, centered independently of its letter widths */}
+          {/* The monogram uses a fixed centered box so the visual AR mark stays on the page center line. */}
           <motion.div
             initial={{ opacity: 0, scale: .82 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: .55, duration: .9, ease: "easeOut" }}
-            className="relative mx-auto mt-8 h-32 w-40 sm:h-36 sm:w-44"
+            className="relative mx-auto mt-8 flex h-32 w-44 items-center justify-center sm:h-36 sm:w-48"
             aria-label="A R monogram"
           >
-            <span className="absolute left-1/2 top-1/2 -translate-x-[58%] -translate-y-1/2 font-serif text-[92px] font-light leading-none tracking-[-0.16em] text-[#F3D6C4] drop-shadow-lg sm:text-[108px]">A</span>
-            <span className="absolute left-1/2 top-1/2 translate-x-[2%] -translate-y-1/2 font-serif text-[92px] font-light leading-none tracking-[-0.16em] text-[#D8A98A]/95 drop-shadow-lg sm:text-[108px]">R</span>
+            <div className="relative flex items-center justify-center -translate-x-1">
+              <span className="font-serif text-[92px] font-light leading-none tracking-[-0.16em] text-[#F3D6C4] drop-shadow-lg sm:text-[108px]">A</span>
+              <span className="-ml-3 font-serif text-[92px] font-light leading-none tracking-[-0.16em] text-[#D8A98A]/95 drop-shadow-lg sm:text-[108px]">R</span>
+            </div>
             <span className="absolute bottom-0 left-1/2 h-px w-14 -translate-x-1/2 bg-[#E7CDBE]/70" />
           </motion.div>
 
@@ -69,7 +70,7 @@ export default function InvitationCover({ onOpen }: InvitationCoverProps) {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.05, duration: .8 }}
-            className="mt-6 text-center font-script text-3xl leading-none text-[#F2DED2] sm:text-4xl"
+            className="mt-6 w-full text-center font-script text-3xl leading-none text-[#F2DED2] sm:text-4xl"
           >
             to celebrate our forever
           </motion.p>
@@ -89,7 +90,7 @@ export default function InvitationCover({ onOpen }: InvitationCoverProps) {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.4, duration: .8 }}
-            className="text-center font-serif text-4xl font-light tracking-wide text-[#FFF8F2] sm:text-6xl"
+            className="w-full text-center font-serif text-4xl font-light tracking-wide text-[#FFF8F2] sm:text-6xl"
           >
             <span>Aparna</span>
             <span className="mx-3 font-light text-[#D8A98A] sm:mx-5">+</span>
