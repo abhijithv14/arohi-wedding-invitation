@@ -24,7 +24,7 @@ export default function InvitationCover({ onOpen }: InvitationCoverProps) {
   return <AnimatePresence>{visible && (
     <motion.div initial={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.9 }} className="fixed inset-0 z-[100] overflow-hidden bg-[#2A211D]">
       <motion.div initial={{ scale: 1.08 }} animate={{ scale: 1 }} transition={{ duration: 12, ease: "linear" }} className="absolute inset-0">
-        <Image src={"/images/couple1.jpg"} alt="Aparna and Rohit" fill priority sizes="100vw" className="object-cover" />
+        <Image src="/images/forever.jpg" alt="Aparna and Rohit" fill priority sizes="100vw" className="object-cover" />
       </motion.div>
       <div className="absolute inset-0 bg-[#211814]/45" />
       <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-transparent to-black/65" />
@@ -36,8 +36,7 @@ export default function InvitationCover({ onOpen }: InvitationCoverProps) {
           <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.15 }} className="mt-5 font-script text-2xl sm:text-3xl text-[#F2DED2]">to celebrate our forever</motion.p>
           <div className="mx-auto my-7 h-px w-16 bg-[#E7CDBE]/70" />
           <p className="text-[10px] tracking-[.32em] uppercase text-white/85">{weddingConfig.mainWeddingDate} · Kerala</p>
-          <motion.button initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.8 }} onClick={openInvitation} className="mt-10 rounded-full border border-[#F2DED2]/70 bg-[#FFF8F2]/95 px-8 py-3 text-[10px] tracking-[.3em] text-[#5D4034] shadow-2xl hover:bg-white hover:scale-105 transition">OPEN INVITATION · ♫</motion.button>
-          <p className="mt-5 text-[9px] tracking-[.18em] text-white/65">Tap to enter & start the music</p>
+          <motion.button type="button" initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.8 }} onClick={openInvitation} className="mt-10 rounded-full border border-[#F2DED2]/70 bg-[#FFF8F2]/95 px-8 py-3 text-[10px] tracking-[.3em] text-[#5D4034] shadow-2xl hover:bg-white hover:scale-105 transition">OPEN INVITATION · ♫</motion.button>
         </div>
       </div>
     </motion.div>
