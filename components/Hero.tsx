@@ -14,12 +14,12 @@ export default function Hero() {
         className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: "url('/images/couple1.jpg')" }}
       >
-        {/* Keep the photograph bright and visible. The warm brown tint sits above
-            the image instead of reducing the image opacity/brightness. */}
+        {/* Warm brown overlay keeps the photograph visible while improving text contrast. */}
         <div className="absolute inset-0 bg-[#6B4636]/20" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#4B3026]/10 via-[#6B4636]/14 to-[#3D2922]/28" />
-        {/* Slightly stronger tint on small screens so the centered text stays crisp. */}
-        <div className="absolute inset-0 bg-[#6B4636]/5 sm:hidden" />
+        {/* Phones need a slightly stronger brown layer because the smaller display makes
+            light text harder to read against the photograph. Desktop remains unchanged. */}
+        <div className="absolute inset-0 bg-[#3F2921]/20 sm:hidden" />
       </motion.div>
 
       <div className="relative z-10 max-w-5xl mx-auto px-6 w-full py-20 flex flex-col items-center justify-center text-center text-[#F8EDE5]">
