@@ -7,91 +7,87 @@ import { weddingConfig } from "@/config/wedding";
 
 export default function MusicToggle() {
   const [isMuted, setIsMuted] = useState(false);
-  const [loaded, setLoaded] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    const audio = new Audio(
-      weddingConfig.backgroundAudio || "/audio/background-music.mp3"
-    );
+    const audio = new Audio(weddingConfig.backgroundAudio || "/audio/background-music.mp3");
     audio.loop = true;
     audio.volume = 0.7;
+    audio.preload = "auto";
     audioRef.current = audio;
-    setLoaded(true);
 
-    // Try to start the music immediately. Browsers may block audible
-    // autoplay; in that case the first user interaction will start it.
-    const startMusic = () => {
-      if (!audioRef.current) return;
-      audioRef.current.muted = false;
-      audioRef.current.play().catch(() => {
-        // Autoplay was blocked. Start after the user's first interaction.
-      });
-    };
+    const onPlay = () => setIsPlaying(true);
+    const onPause = () => setIsPlaying(false);
+    audio.addEventListener("play", onPlay);
+    audio.addEventListener("pause", onPause);
 
-    startMusic();
-
-    const startAfterInteraction = () => {
-      if (!audioRef.current) return;
-      audioRef.current.muted = false;
+    // Audible autoplay is controlled by the browser. Try immediately;
+    // if blocked, the first real user interaction starts the same audio.
+    const tryPlay = () => {
+      if (!audioRef.current || isMuted) return;
       audioRef.current.play().catch(() => undefined);
-      window.removeEventListener("pointerdown", startAfterInteraction);
-      window.removeEventListener("keydown", startAfterInteraction);
-      window.removeEventListener("touchstart", startAfterInteraction);
     };
 
-    window.addEventListener("pointerdown", startAfterInteraction, { once: true });
-    window.addEventListener("keydown", startAfterInteraction, { once: true });
-    window.addEventListener("touchstart", startAfterInteraction, { once: true });
+    tryPlay();
+
+    const onFirstInteraction = () => {
+      tryPlay();
+      window.removeEventListener("pointerdown", onFirstInteraction);
+      window.removeEventListener("keydown", onFirstInteraction);
+      window.removeEventListener("touchstart", onFirstInteraction);
+    };
+
+    window.addEventListener("pointerdown", onFirstInteraction, { once: true });
+    window.addEventListener("keydown", onFirstInteraction, { once: true });
+    window.addEventListener("touchstart", onFirstInteraction, { once: true });
 
     return () => {
-      window.removeEventListener("pointerdown", startAfterInteraction);
-      window.removeEventListener("keydown", startAfterInteraction);
-      window.removeEventListener("touchstart", startAfterInteraction);
+      window.removeEventListener("pointerdown", onFirstInteraction);
+      window.removeEventListener("keydown", onFirstInteraction);
+      window.removeEventListener("touchstart", onFirstInteraction);
+      audio.removeEventListener("play", onPlay);
+      audio.removeEventListener("pause", onPause);
       audio.pause();
       audio.src = "";
       audioRef.current = null;
     };
-  }, []);
+  }, [isMuted]);
 
   const toggleMute = () => {
-    if (!audioRef.current) return;
+    const audio = audioRef.current;
+    if (!audio) return;
 
-    if (audioRef.current.paused) {
-      audioRef.current.play().catch(() => undefined);
+    if (isMuted) {
+      audio.muted = false;
+      setIsMuted(false);
+      audio.play().catch(() => undefined);
+    } else {
+      audio.muted = true;
+      setIsMuted(true);
     }
-
-    const nextMuted = !isMuted;
-    audioRef.current.muted = nextMuted;
-    setIsMuted(nextMuted);
   };
 
-  if (!loaded) return null;
-
   return (
-    <div className="fixed bottom-6 right-6 z-40 flex items-center">
+    <div className="fixed bottom-6 right-6 z-50">
       <motion.button
         type="button"
         onClick={toggleMute}
-        aria-label={isMuted ? "Unmute background music" : "Mute background music"}
-        title={isMuted ? "Unmute music" : "Mute music"}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
+        aria-label={isMuted ? "Play wedding music" : "Mute wedding music"}
+        title={isMuted ? "Play music" : "Mute music"}
+        whileHover={{ scale: 1.08 }}
+        whileTap={{ scale: 0.92 }}
         className={`w-12 h-12 rounded-full flex items-center justify-center shadow-2xl border backdrop-blur-md transition-all duration-300 ${
           isMuted
-            ? "bg-white/90 text-[#3D3831] border-[#E8E3DA] hover:bg-white"
+            ? "bg-white/95 text-[#3D3831] border-[#E8E3DA]"
             : "bg-[#3D3831] text-amber-100 border-amber-300/40 ring-2 ring-amber-300/20"
         }`}
       >
-        {isMuted ? (
+        {isMuted || !isPlaying ? (
           <VolumeX size={20} />
         ) : (
           <div className="relative flex items-center justify-center">
             <Music size={20} className="animate-pulse" />
-            <span className="absolute -top-1 -right-1 flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500" />
-            </span>
             <Volume2 size={11} className="absolute -bottom-1 -right-1" />
           </div>
         )}
