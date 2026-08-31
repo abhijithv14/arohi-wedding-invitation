@@ -29,8 +29,8 @@ export const weddingConfig = {
   tagline: "ARE GETTING MARRIED",
   heroSubtitle: "We invite you to join us in celebrating our wedding story",
   storyHeading: "Every chapter has led us here.",
-  storyParagraph1: "From our very first quiet conversation to unforgettable journeys together, our story has been built on shared laughter, deep trust, and countless cherished moments.",
-  storyParagraph2: "As we step into this beautiful new chapter, we are filled with gratitude to celebrate our union surrounded by the warmth of our beloved family and friends.",
+  storyParagraph1: "What started with a quiet conversation grew into a beautiful friendship, filled with laughter, shared dreams and countless cherished moments. Somewhere along the way, friendship found its way to something even more beautiful - a love we now get to carry with us for a lifetime.",
+  storyParagraph2: "As we begin our forever, we are grateful to have our beloved family and friends by our side to celebrate this beautiful chapter with us.",
   backgroundAudio: "/audio/background-music.mp3",
   events: [
     { id: "sangeeth", name: "Sangeeth Ceremony", date: "2027-02-09", time: "6:00 PM – 9:00 PM", location: "Bride's Home", addressDetails: "Alalimadathil, Puthuppally P O, Kayamkulam, Kerala", dressCode: "Indian Ethnic Wear Only", googleMapsUrl: "https://goo.gl/maps/WWByjNQwqjKxoWAs5?g_st=aw", image: "/images/event-sangeeth.jpg", iconName: "sparkles", description: "An evening filled with music, dance, laughter, and celebratory festive Indian ethnic attire." },
