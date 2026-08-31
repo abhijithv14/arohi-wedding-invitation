@@ -12,54 +12,26 @@ export default function Hero() {
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 1.8, ease: "easeOut" }}
         className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: "url('/images/couple1.jpg')", filter: "saturate(0.55) contrast(0.72)" }}
+        style={{ backgroundImage: "url('/images/couple1.jpg')", filter: "brightness(0.55) saturate(0.55) contrast(0.72)" }}
       >
         <div className="absolute inset-0 bg-[#5A3B2E]/68" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#4A3027]/58 via-[#5A3B2E]/64 to-[#3D2922]/74" />
       </motion.div>
 
       <div className="relative z-10 max-w-5xl mx-auto px-6 w-full py-20 flex flex-col items-center justify-center text-center text-[#F2E4DB]">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.1, delay: 0.35 }}
-          className="max-w-3xl flex flex-col items-center"
-        >
+        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.1, delay: 0.35 }} className="max-w-3xl flex flex-col items-center">
           <p className="text-[10px] sm:text-xs tracking-[0.42em] text-[#E8D1C4] font-semibold uppercase">Together with our families</p>
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            className="mt-6 font-script text-2xl sm:text-3xl text-[#E7C5B3]"
-          >
-            Aparna + Rohit ♡
-          </motion.p>
-          <h1 className="mt-6 font-serif text-3xl sm:text-4xl lg:text-6xl font-light leading-[1] tracking-wide text-[#F7EDE7]">
-            WE <span className="block">ARE GETTING</span><span className="block text-[#DDB39E]">MARRIED</span>
-          </h1>
-          <div className="my-6 flex items-center justify-center gap-3 text-[#C9957C]">
-            <span className="h-px w-10 bg-[#C9957C]/75" />
-            <Heart size={13} className="fill-[#C9957C]/80" />
-            <span className="h-px w-10 bg-[#C9957C]/75" />
-          </div>
+          <motion.p initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.6 }} className="mt-6 font-script text-2xl sm:text-3xl text-[#E7C5B3]">Aparna + Rohit ♡</motion.p>
+          <h1 className="mt-6 font-serif text-3xl sm:text-4xl lg:text-6xl font-light leading-[1] tracking-wide text-[#F7EDE7]">WE <span className="block">ARE GETTING</span><span className="block text-[#DDB39E]">MARRIED</span></h1>
+          <div className="my-6 flex items-center justify-center gap-3 text-[#C9957C]"><span className="h-px w-10 bg-[#C9957C]/75" /><Heart size={13} className="fill-[#C9957C]/80" /><span className="h-px w-10 bg-[#C9957C]/75" /></div>
           <p className="text-xs sm:text-sm tracking-[0.35em] uppercase text-[#E8D1C4] font-semibold">February 11, 2027</p>
-          <p className="mt-6 max-w-2xl text-sm sm:text-base leading-8 font-medium tracking-wide text-[#E3CEC3]">
-            We invite you to share in our joy as we begin this beautiful journey together.<br className="hidden sm:block" />Your love, blessings and presence mean the world to us.
-          </p>
+          <p className="mt-6 max-w-2xl text-sm sm:text-base leading-8 font-medium tracking-wide text-[#E3CEC3]">We invite you to share in our joy as we begin this beautiful journey together.<br className="hidden sm:block" />Your love, blessings and presence mean the world to us.</p>
         </motion.div>
       </div>
 
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.5, duration: 1 }}
-        className="absolute bottom-8 left-0 right-0 z-10 flex flex-col items-center justify-center text-[#DDB39E]/90 cursor-pointer"
-        onClick={() => document.querySelector("#countdown")?.scrollIntoView({ behavior: "smooth" })}
-      >
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5, duration: 1 }} className="absolute bottom-8 left-0 right-0 z-10 flex flex-col items-center justify-center text-[#DDB39E]/90 cursor-pointer" onClick={() => document.querySelector("#countdown")?.scrollIntoView({ behavior: "smooth" })}>
         <span className="text-[10px] tracking-[0.3em] font-light uppercase mb-2">SCROLL TO BEGIN</span>
-        <motion.div animate={{ y: [0, 8, 0] }} transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}>
-          <ChevronDown size={20} />
-        </motion.div>
+        <motion.div animate={{ y: [0, 8, 0] }} transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}><ChevronDown size={20} /></motion.div>
       </motion.div>
     </section>
   );
