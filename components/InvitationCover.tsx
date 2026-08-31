@@ -16,6 +16,9 @@ export default function InvitationCover({ onOpen }: InvitationCoverProps) {
   }, [visible]);
 
   const openInvitation = () => {
+    // This click is a real browser user gesture. Notify the single audio
+    // player before removing the cover so mobile browsers can start playback.
+    window.dispatchEvent(new Event("wedding:open"));
     setVisible(false);
     onOpen();
     requestAnimationFrame(() => window.scrollTo(0, 0));
