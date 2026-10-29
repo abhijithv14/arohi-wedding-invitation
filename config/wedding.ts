@@ -48,6 +48,8 @@ export const weddingConfig = {
     { id: "g2", src: "/images/forever.jpg", alt: "Aparna and Rohit holding hands", title: "Holding On Forever", caption: "Two hands, one beautiful journey." },
     { id: "g3", src: "/images/cute.jpg", alt: "Aparna and Rohit sharing a sweet moment", title: "Sweet Moments", caption: "The little moments that mean everything." },
     { id: "g4", src: "/images/childhood.jpg", alt: "Childhood memory", title: "A Memory to Treasure", caption: "A glimpse into the story behind us." },
+    { id: "g5", src: "/images/couple2.jpg", alt: "Aparna and Rohit together", title: "A Special Moment", caption: "Another memory to treasure." },
+    { id: "g6", src: "/images/couple3.jpg", alt: "Aparna and Rohit together", title: "Together Always", caption: "A beautiful moment on our journey." },
   ] as GalleryPhoto[],
   footerText: "With lots of love",
   contactEmail: "celebrate@aparna-rohit.com",
