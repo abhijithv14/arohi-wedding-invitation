@@ -18,7 +18,6 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
     let timer: ReturnType<typeof setTimeout> | undefined;
     let transitionTimer: ReturnType<typeof setTimeout> | undefined;
     let cancelled = false;
-    let scrollingAutomatically = false;
 
     const clearTimers = () => {
       if (timer !== undefined) clearTimeout(timer);
@@ -28,7 +27,7 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
     };
 
     const stopGuidance = () => {
-      if (scrollingAutomatically || cancelled) return;
+      if (cancelled) return;
       cancelled = true;
       clearTimers();
     };
@@ -66,7 +65,6 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
           return;
         }
 
-        scrollingAutomatically = true;
         const top = Math.max(
           0,
           window.scrollY + target.getBoundingClientRect().top - 76
@@ -84,7 +82,6 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
         // Start the next 15-second wait only after this section transition.
         transitionTimer = setTimeout(() => {
           transitionTimer = undefined;
-          scrollingAutomatically = false;
           scheduleNext();
         }, reducedMotion ? 100 : 1_200);
       }, delayMs);
