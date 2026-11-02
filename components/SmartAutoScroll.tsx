@@ -6,13 +6,14 @@ interface SmartAutoScrollProps {
   enabled: boolean;
 }
 
-// Gently guides inactive visitors through the main sections, but gives
-// complete control back as soon as they interact with the page.
+// Guides inactive visitors through the invitation. Any intentional input
+// cancels the guide permanently so manual browsing always takes priority.
 export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
   useEffect(() => {
     if (!enabled) return;
 
     const sections = ["countdown", "events", "story", "gallery"];
+    const delayMs = 15_000;
     let currentIndex = 0;
     let timer: ReturnType<typeof setTimeout> | undefined;
     let transitionTimer: ReturnType<typeof setTimeout> | undefined;
@@ -20,8 +21,10 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
     let scrollingAutomatically = false;
 
     const clearTimers = () => {
-      if (timer) clearTimeout(timer);
-      if (transitionTimer) clearTimeout(transitionTimer);
+      if (timer !== undefined) clearTimeout(timer);
+      if (transitionTimer !== undefined) clearTimeout(transitionTimer);
+      timer = undefined;
+      transitionTimer = undefined;
     };
 
     const stopGuidance = () => {
@@ -30,10 +33,31 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
       clearTimers();
     };
 
+    const isUsingProtectedArea = () => {
+      const active = document.activeElement;
+      if (active instanceof HTMLElement && active.closest("#rsvp, form")) {
+        return true;
+      }
+
+      return Boolean(
+        document.querySelector(
+          'header button[aria-expanded="true"], header [role="menu"]'
+        )
+      );
+    };
+
     const scheduleNext = () => {
       if (cancelled || currentIndex >= sections.length) return;
+
       timer = setTimeout(() => {
+        timer = undefined;
         if (cancelled) return;
+
+        // Never take the visitor past an open menu or an active RSVP form.
+        if (document.hidden || isUsingProtectedArea()) {
+          stopGuidance();
+          return;
+        }
 
         const target = document.getElementById(sections[currentIndex]);
         if (!target) {
@@ -43,16 +67,27 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
         }
 
         scrollingAutomatically = true;
-        target.scrollIntoView({ behavior: "smooth", block: "start" });
+        const top = Math.max(
+          0,
+          window.scrollY + target.getBoundingClientRect().top - 76
+        );
+        const reducedMotion = window.matchMedia(
+          "(prefers-reduced-motion: reduce)"
+        ).matches;
+
+        window.scrollTo({
+          top,
+          behavior: reducedMotion ? "auto" : "smooth",
+        });
         currentIndex += 1;
 
-        // Allow the smooth scroll to finish before starting the next
-        // 15-second inactivity window.
+        // Start the next 15-second wait only after this section transition.
         transitionTimer = setTimeout(() => {
+          transitionTimer = undefined;
           scrollingAutomatically = false;
           scheduleNext();
-        }, 1200);
-      }, 15000);
+        }, reducedMotion ? 100 : 1_200);
+      }, delayMs);
     };
 
     const interactionEvents: (keyof WindowEventMap)[] = [
@@ -61,11 +96,17 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
       "touchmove",
       "pointerdown",
       "keydown",
+      "focusin",
     ];
 
     interactionEvents.forEach((eventName) =>
       window.addEventListener(eventName, stopGuidance, { passive: true })
     );
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) stopGuidance();
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
 
     scheduleNext();
 
@@ -74,6 +115,7 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
       interactionEvents.forEach((eventName) =>
         window.removeEventListener(eventName, stopGuidance)
       );
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
   }, [enabled]);
 
