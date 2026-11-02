@@ -6,15 +6,15 @@ interface SmartAutoScrollProps {
   enabled: boolean;
 }
 
-// Slowly moves the invitation upward after 8 seconds without visitor input.
+// Slowly moves the invitation upward after the cover closes and the visitor is idle.
 // Manual interaction pauses the motion and starts a fresh idle countdown.
 export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
   useEffect(() => {
     if (!enabled) return;
 
-    const idleDelayMs = 5_000;
+    const idleDelayMs = 6_500;
     const pixelsPerSecond = 32;
-    const mobilePixelsPerSecond = 40;
+    const mobilePixelsPerSecond = 60;
     const scrollSpeed = window.matchMedia('(max-width: 767px), (pointer: coarse)').matches
       ? mobilePixelsPerSecond
       : pixelsPerSecond;
@@ -23,6 +23,7 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
     let lastFrameTime = 0;
     let autoScrolling = false;
     let destroyed = false;
+    const originalScrollBehavior = document.documentElement.style.scrollBehavior;
 
     const isUsingProtectedArea = () => {
       const active = document.activeElement;
@@ -39,6 +40,7 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
 
     const stopAnimation = () => {
       autoScrolling = false;
+      document.documentElement.style.scrollBehavior = originalScrollBehavior;
       lastFrameTime = 0;
       if (animationFrame) {
         cancelAnimationFrame(animationFrame);
@@ -77,13 +79,13 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
         return;
       }
 
-      // Use the browser's window scrolling API for consistent desktop and
-      // mobile behaviour, then keep the document root position in sync.
+      // Use instant frame-by-frame movement for stable constant-speed scrolling,
+      // including on iOS Safari.
       const nextScroll = Math.min(
         maxScroll,
         currentScroll + scrollSpeed * deltaSeconds
       );
-      window.scrollTo(0, nextScroll);
+      window.scrollTo({ left: 0, top: nextScroll, behavior: "auto" });
       scrollRoot.scrollTop = nextScroll;
 
       animationFrame = requestAnimationFrame(animateScroll);
@@ -104,6 +106,9 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
 
         if (!autoScrolling) {
           autoScrolling = true;
+          // Override the site's `scroll-smooth` class; smooth scrolling on every
+          // animation frame prevents reliable constant-speed movement in Safari.
+          document.documentElement.style.scrollBehavior = "auto";
           lastFrameTime = 0;
           animationFrame = requestAnimationFrame(animateScroll);
         }
