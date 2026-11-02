@@ -14,6 +14,10 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
 
     const idleDelayMs = 5_000;
     const pixelsPerSecond = 32;
+    const mobilePixelsPerSecond = 40;
+    const scrollSpeed = window.matchMedia('(max-width: 767px), (pointer: coarse)').matches
+      ? mobilePixelsPerSecond
+      : pixelsPerSecond;
     let idleTimer: ReturnType<typeof setTimeout> | undefined;
     let animationFrame = 0;
     let lastFrameTime = 0;
@@ -77,7 +81,7 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
       // mobile behaviour, then keep the document root position in sync.
       const nextScroll = Math.min(
         maxScroll,
-        currentScroll + pixelsPerSecond * deltaSeconds
+        currentScroll + scrollSpeed * deltaSeconds
       );
       window.scrollTo(0, nextScroll);
       scrollRoot.scrollTop = nextScroll;
