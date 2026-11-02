@@ -57,16 +57,14 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
       }
 
       if (lastFrameTime === 0) lastFrameTime = timestamp;
-      const deltaSeconds = Math.min((timestamp - lastFrameTime) / 1000, 0.05);
+      const deltaSeconds = Math.min((timestamp - lastFrameTime) / 1000, 0.1);
       lastFrameTime = timestamp;
 
       const scrollRoot = document.scrollingElement ?? document.documentElement;
-      const currentScroll = Math.max(
-        window.scrollY,
-        scrollRoot.scrollTop,
-        document.documentElement.scrollTop,
-        document.body.scrollTop
-      );
+      // Use the browser's current page position as the single source of truth.
+      // Mixing window.scrollY, body.scrollTop and documentElement.scrollTop can
+      // make iOS Safari alternate between slightly different positions.
+      const currentScroll = window.scrollY;
       const documentHeight = Math.max(
         scrollRoot.scrollHeight,
         document.documentElement.scrollHeight,
@@ -85,8 +83,9 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
         maxScroll,
         currentScroll + scrollSpeed * deltaSeconds
       );
-      window.scrollTo({ left: 0, top: nextScroll, behavior: "auto" });
-      scrollRoot.scrollTop = nextScroll;
+      // Update the page through one API only. Do not also assign scrollTop:
+      // Safari can produce visible jitter when both mechanisms run each frame.
+      window.scrollTo(0, nextScroll);
 
       animationFrame = requestAnimationFrame(animateScroll);
     };
