@@ -6,14 +6,14 @@ interface SmartAutoScrollProps {
   enabled: boolean;
 }
 
-// After 15 seconds without input, slowly moves the page upward.
-// Any visitor interaction pauses it; another idle period can resume it.
+// Slowly moves the invitation upward after 8 seconds without visitor input.
+// Manual interaction pauses the motion and starts a fresh idle countdown.
 export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
   useEffect(() => {
     if (!enabled) return;
 
-    const idleDelayMs = 15_000;
-    const pixelsPerSecond = 10;
+    const idleDelayMs = 8_000;
+    const pixelsPerSecond = 18;
     let idleTimer: ReturnType<typeof setTimeout> | undefined;
     let animationFrame = 0;
     let lastFrameTime = 0;
@@ -22,13 +22,13 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
 
     const isUsingProtectedArea = () => {
       const active = document.activeElement;
-      if (active instanceof HTMLElement && active.closest("#rsvp, form")) {
+      if (active instanceof HTMLElement && active.closest("#rsvp, #rsvp form")) {
         return true;
       }
 
       return Boolean(
         document.querySelector(
-          'header button[aria-expanded="true"], header [role="menu"]'
+          'header button[aria-expanded="true"], header [role="menu"], .mobile-menu-open'
         )
       );
     };
@@ -54,29 +54,21 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
       const deltaSeconds = Math.min((timestamp - lastFrameTime) / 1000, 0.05);
       lastFrameTime = timestamp;
 
-      const maxScroll = Math.max(
-        0,
-        document.documentElement.scrollHeight - window.innerHeight
-      );
+      const scrollRoot = document.scrollingElement ?? document.documentElement;
+      const maxScroll = Math.max(0, scrollRoot.scrollHeight - window.innerHeight);
 
-      if (window.scrollY >= maxScroll - 1) {
+      if (scrollRoot.scrollTop >= maxScroll - 1) {
         stopAnimation();
         return;
       }
 
-      window.scrollBy(0, pixelsPerSecond * deltaSeconds);
-      animationFrame = requestAnimationFrame(animateScroll);
-    };
+      // Set the scrolling element directly so the motion works consistently
+      // across browsers even when CSS smooth scrolling is enabled.
+      scrollRoot.scrollTop = Math.min(
+        maxScroll,
+        scrollRoot.scrollTop + pixelsPerSecond * deltaSeconds
+      );
 
-    const startAnimation = () => {
-      if (destroyed || autoScrolling || document.hidden) return;
-      if (isUsingProtectedArea()) {
-        scheduleIdleStart();
-        return;
-      }
-
-      autoScrolling = true;
-      lastFrameTime = 0;
       animationFrame = requestAnimationFrame(animateScroll);
     };
 
@@ -86,7 +78,18 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
 
       idleTimer = setTimeout(() => {
         idleTimer = undefined;
-        startAnimation();
+        if (destroyed || document.hidden) return;
+
+        if (isUsingProtectedArea()) {
+          scheduleIdleStart();
+          return;
+        }
+
+        if (!autoScrolling) {
+          autoScrolling = true;
+          lastFrameTime = 0;
+          animationFrame = requestAnimationFrame(animateScroll);
+        }
       }, idleDelayMs);
     };
 
@@ -109,10 +112,8 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
       });
     });
 
-    // If focus enters RSVP, pause; when focus leaves, begin a fresh idle wait.
     const handleFocusIn = () => {
-      const active = document.activeElement;
-      if (active instanceof HTMLElement && active.closest("#rsvp, form")) {
+      if (isUsingProtectedArea()) {
         stopAnimation();
         if (idleTimer !== undefined) clearTimeout(idleTimer);
         idleTimer = undefined;
@@ -120,14 +121,12 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
         handleVisitorActivity();
       }
     };
+
     const handleFocusOut = () => {
       window.setTimeout(() => {
         if (!isUsingProtectedArea()) scheduleIdleStart();
       }, 0);
     };
-
-    document.addEventListener("focusin", handleFocusIn);
-    document.addEventListener("focusout", handleFocusOut);
 
     const handleVisibilityChange = () => {
       if (document.hidden) {
@@ -138,9 +137,11 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
         scheduleIdleStart();
       }
     };
+
+    document.addEventListener("focusin", handleFocusIn);
+    document.addEventListener("focusout", handleFocusOut);
     document.addEventListener("visibilitychange", handleVisibilityChange);
 
-    // Do not auto-scroll while a menu is already open when the page activates.
     scheduleIdleStart();
 
     return () => {
