@@ -6,31 +6,19 @@ interface SmartAutoScrollProps {
   enabled: boolean;
 }
 
-// Guides inactive visitors through the invitation. Any intentional input
-// cancels the guide permanently so manual browsing always takes priority.
+// After 15 seconds without input, slowly moves the page upward.
+// Any visitor interaction pauses it; another idle period can resume it.
 export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
   useEffect(() => {
     if (!enabled) return;
 
-    const sections = ["countdown", "events", "story", "gallery"];
-    const delayMs = 15_000;
-    let currentIndex = 0;
-    let timer: ReturnType<typeof setTimeout> | undefined;
-    let transitionTimer: ReturnType<typeof setTimeout> | undefined;
-    let cancelled = false;
-
-    const clearTimers = () => {
-      if (timer !== undefined) clearTimeout(timer);
-      if (transitionTimer !== undefined) clearTimeout(transitionTimer);
-      timer = undefined;
-      transitionTimer = undefined;
-    };
-
-    const stopGuidance = () => {
-      if (cancelled) return;
-      cancelled = true;
-      clearTimers();
-    };
+    const idleDelayMs = 15_000;
+    const pixelsPerSecond = 10;
+    let idleTimer: ReturnType<typeof setTimeout> | undefined;
+    let animationFrame = 0;
+    let lastFrameTime = 0;
+    let autoScrolling = false;
+    let destroyed = false;
 
     const isUsingProtectedArea = () => {
       const active = document.activeElement;
@@ -45,46 +33,66 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
       );
     };
 
-    const scheduleNext = () => {
-      if (cancelled || currentIndex >= sections.length) return;
+    const stopAnimation = () => {
+      autoScrolling = false;
+      lastFrameTime = 0;
+      if (animationFrame) {
+        cancelAnimationFrame(animationFrame);
+        animationFrame = 0;
+      }
+    };
 
-      timer = setTimeout(() => {
-        timer = undefined;
-        if (cancelled) return;
+    const animateScroll = (timestamp: number) => {
+      if (destroyed || !autoScrolling) return;
 
-        // Never take the visitor past an open menu or an active RSVP form.
-        if (document.hidden || isUsingProtectedArea()) {
-          stopGuidance();
-          return;
-        }
+      if (document.hidden || isUsingProtectedArea()) {
+        stopAnimation();
+        return;
+      }
 
-        const target = document.getElementById(sections[currentIndex]);
-        if (!target) {
-          currentIndex += 1;
-          scheduleNext();
-          return;
-        }
+      if (lastFrameTime === 0) lastFrameTime = timestamp;
+      const deltaSeconds = Math.min((timestamp - lastFrameTime) / 1000, 0.05);
+      lastFrameTime = timestamp;
 
-        const top = Math.max(
-          0,
-          window.scrollY + target.getBoundingClientRect().top - 76
-        );
-        const reducedMotion = window.matchMedia(
-          "(prefers-reduced-motion: reduce)"
-        ).matches;
+      const maxScroll = Math.max(
+        0,
+        document.documentElement.scrollHeight - window.innerHeight
+      );
 
-        window.scrollTo({
-          top,
-          behavior: reducedMotion ? "auto" : "smooth",
-        });
-        currentIndex += 1;
+      if (window.scrollY >= maxScroll - 1) {
+        stopAnimation();
+        return;
+      }
 
-        // Start the next 15-second wait only after this section transition.
-        transitionTimer = setTimeout(() => {
-          transitionTimer = undefined;
-          scheduleNext();
-        }, reducedMotion ? 100 : 1_200);
-      }, delayMs);
+      window.scrollBy(0, pixelsPerSecond * deltaSeconds);
+      animationFrame = requestAnimationFrame(animateScroll);
+    };
+
+    const startAnimation = () => {
+      if (destroyed || autoScrolling || document.hidden) return;
+      if (isUsingProtectedArea()) {
+        scheduleIdleStart();
+        return;
+      }
+
+      autoScrolling = true;
+      lastFrameTime = 0;
+      animationFrame = requestAnimationFrame(animateScroll);
+    };
+
+    const scheduleIdleStart = () => {
+      if (destroyed) return;
+      if (idleTimer !== undefined) clearTimeout(idleTimer);
+
+      idleTimer = setTimeout(() => {
+        idleTimer = undefined;
+        startAnimation();
+      }, idleDelayMs);
+    };
+
+    const handleVisitorActivity = () => {
+      stopAnimation();
+      scheduleIdleStart();
     };
 
     const interactionEvents: (keyof WindowEventMap)[] = [
@@ -93,25 +101,57 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
       "touchmove",
       "pointerdown",
       "keydown",
-      "focusin",
     ];
 
-    interactionEvents.forEach((eventName) =>
-      window.addEventListener(eventName, stopGuidance, { passive: true })
-    );
+    interactionEvents.forEach((eventName) => {
+      window.addEventListener(eventName, handleVisitorActivity, {
+        passive: true,
+      });
+    });
+
+    // If focus enters RSVP, pause; when focus leaves, begin a fresh idle wait.
+    const handleFocusIn = () => {
+      const active = document.activeElement;
+      if (active instanceof HTMLElement && active.closest("#rsvp, form")) {
+        stopAnimation();
+        if (idleTimer !== undefined) clearTimeout(idleTimer);
+        idleTimer = undefined;
+      } else {
+        handleVisitorActivity();
+      }
+    };
+    const handleFocusOut = () => {
+      window.setTimeout(() => {
+        if (!isUsingProtectedArea()) scheduleIdleStart();
+      }, 0);
+    };
+
+    document.addEventListener("focusin", handleFocusIn);
+    document.addEventListener("focusout", handleFocusOut);
 
     const handleVisibilityChange = () => {
-      if (document.hidden) stopGuidance();
+      if (document.hidden) {
+        stopAnimation();
+        if (idleTimer !== undefined) clearTimeout(idleTimer);
+        idleTimer = undefined;
+      } else {
+        scheduleIdleStart();
+      }
     };
     document.addEventListener("visibilitychange", handleVisibilityChange);
 
-    scheduleNext();
+    // Do not auto-scroll while a menu is already open when the page activates.
+    scheduleIdleStart();
 
     return () => {
-      clearTimers();
-      interactionEvents.forEach((eventName) =>
-        window.removeEventListener(eventName, stopGuidance)
-      );
+      destroyed = true;
+      stopAnimation();
+      if (idleTimer !== undefined) clearTimeout(idleTimer);
+      interactionEvents.forEach((eventName) => {
+        window.removeEventListener(eventName, handleVisitorActivity);
+      });
+      document.removeEventListener("focusin", handleFocusIn);
+      document.removeEventListener("focusout", handleFocusOut);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
   }, [enabled]);
