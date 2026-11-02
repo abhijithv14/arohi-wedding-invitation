@@ -13,7 +13,7 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
     if (!enabled) return;
 
     const idleDelayMs = 5_000;
-    const pixelsPerSecond = 25;
+    const pixelsPerSecond = 32;
     let idleTimer: ReturnType<typeof setTimeout> | undefined;
     let animationFrame = 0;
     let lastFrameTime = 0;
