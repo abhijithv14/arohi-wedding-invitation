@@ -12,6 +12,7 @@ import Footer from "@/components/Footer";
 import MusicToggle from "@/components/MusicToggle";
 import ScrollToTop from "@/components/ScrollToTop";
 import InvitationCover from "@/components/InvitationCover";
+import SmartAutoScroll from "@/components/SmartAutoScroll";
 
 export default function Home() {
   const [invitationOpened, setInvitationOpened] = useState(false);
@@ -20,6 +21,8 @@ export default function Home() {
     <main className="min-h-screen relative bg-[#FAF7F2] text-[#2C2723]">
       {/* Keep the cover mounted until its full curtain animation finishes. */}
       <InvitationCover onOpen={() => setInvitationOpened(true)} />
+
+      <SmartAutoScroll enabled={invitationOpened} />
 
       <div
         aria-hidden={!invitationOpened}
