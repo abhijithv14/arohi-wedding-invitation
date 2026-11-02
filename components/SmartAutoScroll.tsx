@@ -13,7 +13,7 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
     if (!enabled) return;
 
     const idleDelayMs = 8_000;
-    const pixelsPerSecond = 18;
+    const pixelsPerSecond = 25;
     let idleTimer: ReturnType<typeof setTimeout> | undefined;
     let animationFrame = 0;
     let lastFrameTime = 0;
@@ -55,19 +55,32 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
       lastFrameTime = timestamp;
 
       const scrollRoot = document.scrollingElement ?? document.documentElement;
-      const maxScroll = Math.max(0, scrollRoot.scrollHeight - window.innerHeight);
+      const currentScroll = Math.max(
+        window.scrollY,
+        scrollRoot.scrollTop,
+        document.documentElement.scrollTop,
+        document.body.scrollTop
+      );
+      const documentHeight = Math.max(
+        scrollRoot.scrollHeight,
+        document.documentElement.scrollHeight,
+        document.body.scrollHeight
+      );
+      const maxScroll = Math.max(0, documentHeight - window.innerHeight);
 
-      if (scrollRoot.scrollTop >= maxScroll - 1) {
+      if (currentScroll >= maxScroll - 1) {
         stopAnimation();
         return;
       }
 
-      // Set the scrolling element directly so the motion works consistently
-      // across browsers even when CSS smooth scrolling is enabled.
-      scrollRoot.scrollTop = Math.min(
+      // Use the browser's window scrolling API for consistent desktop and
+      // mobile behaviour, then keep the document root position in sync.
+      const nextScroll = Math.min(
         maxScroll,
-        scrollRoot.scrollTop + pixelsPerSecond * deltaSeconds
+        currentScroll + pixelsPerSecond * deltaSeconds
       );
+      window.scrollTo(0, nextScroll);
+      scrollRoot.scrollTop = nextScroll;
 
       animationFrame = requestAnimationFrame(animateScroll);
     };
