@@ -263,10 +263,7 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
         </div>
         <div className="min-w-0 flex-1 text-left">
           <p className="text-sm font-semibold text-rose-950">
-            There&apos;s more to explore
-          </p>
-          <p className="mt-0.5 text-xs leading-relaxed text-stone-600">
-            Swipe up to discover their beautiful wedding moments.
+            Swipe up for more details
           </p>
         </div>
         <button
