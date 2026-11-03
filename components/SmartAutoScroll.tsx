@@ -34,7 +34,6 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
     let iosStepTimer: ReturnType<typeof setTimeout> | undefined;
     let iosFallbackTimer: ReturnType<typeof setTimeout> | undefined;
     let iosScrollEndHandler: (() => void) | undefined;
-    let iosStepInProgress = false;
 
     const isUsingProtectedArea = () => {
       const active = document.activeElement;
@@ -58,7 +57,6 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
         document.removeEventListener("scrollend", iosScrollEndHandler);
         iosScrollEndHandler = undefined;
       }
-      iosStepInProgress = false;
     };
 
     const stopAnimation = () => {
@@ -98,7 +96,6 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
       // requesting the next one; never issue overlapping smooth-scroll calls.
       const stepDistance = Math.max(180, Math.min(420, window.innerHeight * 0.55));
       const target = Math.min(maxScroll, currentScroll + stepDistance);
-      iosStepInProgress = true;
 
       let finished = false;
       const finishStep = () => {
