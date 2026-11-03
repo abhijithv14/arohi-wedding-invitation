@@ -26,6 +26,16 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
     const scrollRoot = (document.scrollingElement ?? document.documentElement) as HTMLElement;
     const originalScrollBehavior = scrollRoot.style.scrollBehavior;
 
+    // iOS Safari uses native, bounded smooth-scroll steps instead of a
+    // per-frame scrollTop animation. This avoids repeatedly taking control
+    // from WebKit's scrolling/momentum system.
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+      (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    let iosStepTimer: ReturnType<typeof setTimeout> | undefined;
+    let iosFallbackTimer: ReturnType<typeof setTimeout> | undefined;
+    let iosScrollEndHandler: (() => void) | undefined;
+    let iosStepInProgress = false;
+
     const isUsingProtectedArea = () => {
       const active = document.activeElement;
       if (active instanceof HTMLElement && active.closest("#rsvp, #rsvp form")) {
@@ -39,8 +49,25 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
       );
     };
 
+    const clearIOSStep = () => {
+      if (iosStepTimer !== undefined) clearTimeout(iosStepTimer);
+      if (iosFallbackTimer !== undefined) clearTimeout(iosFallbackTimer);
+      iosStepTimer = undefined;
+      iosFallbackTimer = undefined;
+      if (iosScrollEndHandler) {
+        document.removeEventListener("scrollend", iosScrollEndHandler);
+        iosScrollEndHandler = undefined;
+      }
+      iosStepInProgress = false;
+    };
+
     const stopAnimation = () => {
       autoScrolling = false;
+      if (isIOS) {
+        clearIOSStep();
+        // Stop any in-flight native smooth scroll at its current position.
+        window.scrollTo({ top: window.scrollY, behavior: "auto" });
+      }
       scrollRoot.style.scrollBehavior = originalScrollBehavior;
       lastFrameTime = 0;
       if (animationFrame) {
@@ -49,7 +76,47 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
       }
     };
 
+    const runIOSScrollStep = () => {
+      if (destroyed || !autoScrolling || !isIOS) return;
+      if (document.hidden || isUsingProtectedArea()) {
+        stopAnimation();
+        return;
+      }
+
+      const currentScroll = window.scrollY;
+      const documentHeight = Math.max(
+        document.documentElement.scrollHeight,
+        document.body.scrollHeight
+      );
+      const maxScroll = Math.max(0, documentHeight - window.innerHeight);
+      if (currentScroll >= maxScroll - 2) {
+        stopAnimation();
+        return;
+      }
+
+      // Keep each native movement bounded. Wait for it to finish before
+      // requesting the next one; never issue overlapping smooth-scroll calls.
+      const stepDistance = Math.max(180, Math.min(420, window.innerHeight * 0.55));
+      const target = Math.min(maxScroll, currentScroll + stepDistance);
+      iosStepInProgress = true;
+
+      let finished = false;
+      const finishStep = () => {
+        if (finished || destroyed || !autoScrolling) return;
+        finished = true;
+        clearIOSStep();
+        iosStepTimer = setTimeout(runIOSScrollStep, 120);
+      };
+
+      iosScrollEndHandler = finishStep;
+      document.addEventListener("scrollend", finishStep, { once: true });
+      // Fallback for iOS versions where scrollend is unavailable or not fired.
+      iosFallbackTimer = setTimeout(finishStep, 1800);
+      window.scrollTo({ top: target, behavior: "smooth" });
+    };
+
     const animateScroll = (timestamp: number) => {
+      if (isIOS) return;
       if (destroyed || !autoScrolling) return;
 
       if (document.hidden || isUsingProtectedArea()) {
@@ -103,9 +170,13 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
           autoScrolling = true;
           // Override the site's `scroll-smooth` class; smooth scrolling on every
           // animation frame prevents reliable constant-speed movement in Safari.
-          scrollRoot.style.scrollBehavior = "auto";
-          lastFrameTime = 0;
-          animationFrame = requestAnimationFrame(animateScroll);
+          if (isIOS) {
+            runIOSScrollStep();
+          } else {
+            scrollRoot.style.scrollBehavior = "auto";
+            lastFrameTime = 0;
+            animationFrame = requestAnimationFrame(animateScroll);
+          }
         }
       }, idleDelayMs);
     };
