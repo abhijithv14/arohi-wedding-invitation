@@ -23,7 +23,7 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
     let lastFrameTime = 0;
     let autoScrolling = false;
     let destroyed = false;
-    const scrollRoot = document.scrollingElement ?? document.documentElement;
+    const scrollRoot = (document.scrollingElement ?? document.documentElement) as HTMLElement;
     const originalScrollBehavior = scrollRoot.style.scrollBehavior;
 
     const isUsingProtectedArea = () => {
