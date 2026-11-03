@@ -23,7 +23,8 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
     let lastFrameTime = 0;
     let autoScrolling = false;
     let destroyed = false;
-    const originalScrollBehavior = document.documentElement.style.scrollBehavior;
+    const scrollRoot = document.scrollingElement ?? document.documentElement;
+    const originalScrollBehavior = scrollRoot.style.scrollBehavior;
 
     const isUsingProtectedArea = () => {
       const active = document.activeElement;
@@ -40,7 +41,7 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
 
     const stopAnimation = () => {
       autoScrolling = false;
-      document.documentElement.style.scrollBehavior = originalScrollBehavior;
+      scrollRoot.style.scrollBehavior = originalScrollBehavior;
       lastFrameTime = 0;
       if (animationFrame) {
         cancelAnimationFrame(animationFrame);
@@ -60,11 +61,9 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
       const deltaSeconds = Math.min((timestamp - lastFrameTime) / 1000, 0.1);
       lastFrameTime = timestamp;
 
-      const scrollRoot = document.scrollingElement ?? document.documentElement;
-      // Use the browser's current page position as the single source of truth.
-      // Mixing window.scrollY, body.scrollTop and documentElement.scrollTop can
-      // make iOS Safari alternate between slightly different positions.
-      const currentScroll = window.scrollY;
+      // Use the document scrolling element as the only scroll source and target.
+      // iOS Safari can jitter when window.scrollTo and scrollTop are mixed.
+      const currentScroll = scrollRoot.scrollTop;
       const documentHeight = Math.max(
         scrollRoot.scrollHeight,
         document.documentElement.scrollHeight,
@@ -77,15 +76,12 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
         return;
       }
 
-      // Use instant frame-by-frame movement for stable constant-speed scrolling,
-      // including on iOS Safari.
+      // Update the document scrolling element directly for iOS Safari.
       const nextScroll = Math.min(
         maxScroll,
         currentScroll + scrollSpeed * deltaSeconds
       );
-      // Update the page through one API only. Do not also assign scrollTop:
-      // Safari can produce visible jitter when both mechanisms run each frame.
-      window.scrollTo(0, nextScroll);
+      scrollRoot.scrollTop = nextScroll;
 
       animationFrame = requestAnimationFrame(animateScroll);
     };
@@ -107,7 +103,7 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
           autoScrolling = true;
           // Override the site's `scroll-smooth` class; smooth scrolling on every
           // animation frame prevents reliable constant-speed movement in Safari.
-          document.documentElement.style.scrollBehavior = "auto";
+          scrollRoot.style.scrollBehavior = "auto";
           lastFrameTime = 0;
           animationFrame = requestAnimationFrame(animateScroll);
         }
