@@ -25,6 +25,7 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
     // visitor has not scrolled within six seconds after opening the cover.
     if (isIOS) {
       let hasScrolled = false;
+      let promptHandled = false;
       let promptTimer: ReturnType<typeof setTimeout> | undefined;
 
       try {
@@ -36,6 +37,7 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
       }
 
       const markPromptHandled = () => {
+        promptHandled = true;
         try {
           window.sessionStorage.setItem(IOS_PROMPT_KEY, "true");
         } catch {
@@ -43,36 +45,45 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
         }
       };
 
-      const handleScroll = () => {
-        hasScrolled = true;
-        markPromptHandled();
-        setShowIOSPrompt(false);
+      const clearPromptTimer = () => {
         if (promptTimer !== undefined) {
           clearTimeout(promptTimer);
           promptTimer = undefined;
         }
       };
 
-      window.addEventListener("scroll", handleScroll, { passive: true });
+      const startPromptTimer = () => {
+        if (promptHandled || hasScrolled || promptTimer !== undefined) return;
+        promptTimer = setTimeout(() => {
+          promptTimer = undefined;
+          if (!hasScrolled && !document.hidden) {
+            markPromptHandled();
+            setShowIOSPrompt(true);
+          }
+        }, 6_000);
+      };
 
-      promptTimer = setTimeout(() => {
-        promptTimer = undefined;
-        if (!hasScrolled && !document.hidden) {
-          markPromptHandled();
-          setShowIOSPrompt(true);
-        }
-      }, 6_000);
+      const handleScroll = () => {
+        hasScrolled = true;
+        markPromptHandled();
+        setShowIOSPrompt(false);
+        clearPromptTimer();
+      };
 
       const handleVisibilityChange = () => {
-        if (document.hidden && promptTimer !== undefined) {
-          clearTimeout(promptTimer);
-          promptTimer = undefined;
+        if (document.hidden) {
+          clearPromptTimer();
+        } else {
+          startPromptTimer();
         }
       };
+
+      window.addEventListener("scroll", handleScroll, { passive: true });
       document.addEventListener("visibilitychange", handleVisibilityChange);
+      startPromptTimer();
 
       return () => {
-        if (promptTimer !== undefined) clearTimeout(promptTimer);
+        clearPromptTimer();
         window.removeEventListener("scroll", handleScroll);
         document.removeEventListener("visibilitychange", handleVisibilityChange);
       };
