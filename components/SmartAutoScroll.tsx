@@ -1,29 +1,111 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 interface SmartAutoScrollProps {
   enabled: boolean;
 }
 
-// Slowly moves the invitation upward after the cover closes and the visitor is idle.
-// Manual interaction pauses the motion and starts a fresh idle countdown.
-export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
-  useEffect(() => {
-    if (!enabled) return;
+const IOS_PROMPT_KEY = "arohi-ios-scroll-prompt-shown";
 
+export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
+  const [showIOSPrompt, setShowIOSPrompt] = useState(false);
+
+  useEffect(() => {
+    if (!enabled) {
+      setShowIOSPrompt(false);
+      return;
+    }
+
+    const isIOS =
+      /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+      (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+
+    // iPhone/iPad: never move the page automatically. Prompt once if the
+    // visitor has not scrolled within six seconds after opening the cover.
+    if (isIOS) {
+      let hasScrolled = false;
+      let promptHandled = false;
+      let promptTimer: ReturnType<typeof setTimeout> | undefined;
+
+      try {
+        if (window.sessionStorage.getItem(IOS_PROMPT_KEY) === "true") {
+          return;
+        }
+      } catch {
+        // Continue for browsers where sessionStorage is unavailable.
+      }
+
+      const markPromptHandled = () => {
+        promptHandled = true;
+        try {
+          window.sessionStorage.setItem(IOS_PROMPT_KEY, "true");
+        } catch {
+          // The in-memory flag still prevents repeat prompts this visit.
+        }
+      };
+
+      const clearPromptTimer = () => {
+        if (promptTimer !== undefined) {
+          clearTimeout(promptTimer);
+          promptTimer = undefined;
+        }
+      };
+
+      const startPromptTimer = () => {
+        if (promptHandled || hasScrolled || promptTimer !== undefined) return;
+        promptTimer = setTimeout(() => {
+          promptTimer = undefined;
+          if (!hasScrolled && !document.hidden) {
+            markPromptHandled();
+            setShowIOSPrompt(true);
+          }
+        }, 6_000);
+      };
+
+      const handleScroll = () => {
+        hasScrolled = true;
+        markPromptHandled();
+        setShowIOSPrompt(false);
+        clearPromptTimer();
+      };
+
+      const handleVisibilityChange = () => {
+        if (document.hidden) {
+          clearPromptTimer();
+        } else {
+          startPromptTimer();
+        }
+      };
+
+      window.addEventListener("scroll", handleScroll, { passive: true });
+      document.addEventListener("visibilitychange", handleVisibilityChange);
+      startPromptTimer();
+
+      return () => {
+        clearPromptTimer();
+        window.removeEventListener("scroll", handleScroll);
+        document.removeEventListener("visibilitychange", handleVisibilityChange);
+      };
+    }
+
+    // Keep the existing gentle auto-scroll behaviour for desktop and Android.
     const idleDelayMs = 6_500;
     const pixelsPerSecond = 32;
     const mobilePixelsPerSecond = 60;
-    const scrollSpeed = window.matchMedia('(max-width: 767px), (pointer: coarse)').matches
+    const scrollSpeed = window.matchMedia(
+      "(max-width: 767px), (pointer: coarse)"
+    ).matches
       ? mobilePixelsPerSecond
       : pixelsPerSecond;
+
     let idleTimer: ReturnType<typeof setTimeout> | undefined;
     let animationFrame = 0;
     let lastFrameTime = 0;
     let autoScrolling = false;
     let destroyed = false;
-    const scrollRoot = (document.scrollingElement ?? document.documentElement) as HTMLElement;
+    const scrollRoot = (document.scrollingElement ??
+      document.documentElement) as HTMLElement;
     const originalScrollBehavior = scrollRoot.style.scrollBehavior;
 
     const isUsingProtectedArea = () => {
@@ -61,8 +143,6 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
       const deltaSeconds = Math.min((timestamp - lastFrameTime) / 1000, 0.1);
       lastFrameTime = timestamp;
 
-      // Use the document scrolling element as the only scroll source and target.
-      // iOS Safari can jitter when window.scrollTo and scrollTop are mixed.
       const currentScroll = scrollRoot.scrollTop;
       const documentHeight = Math.max(
         scrollRoot.scrollHeight,
@@ -76,13 +156,10 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
         return;
       }
 
-      // Update the document scrolling element directly for iOS Safari.
-      const nextScroll = Math.min(
+      scrollRoot.scrollTop = Math.min(
         maxScroll,
         currentScroll + scrollSpeed * deltaSeconds
       );
-      scrollRoot.scrollTop = nextScroll;
-
       animationFrame = requestAnimationFrame(animateScroll);
     };
 
@@ -101,8 +178,6 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
 
         if (!autoScrolling) {
           autoScrolling = true;
-          // Override the site's `scroll-smooth` class; smooth scrolling on every
-          // animation frame prevents reliable constant-speed movement in Safari.
           scrollRoot.style.scrollBehavior = "auto";
           lastFrameTime = 0;
           animationFrame = requestAnimationFrame(animateScroll);
@@ -174,5 +249,35 @@ export default function SmartAutoScroll({ enabled }: SmartAutoScrollProps) {
     };
   }, [enabled]);
 
-  return null;
+  if (!showIOSPrompt) return null;
+
+  return (
+    <div className="fixed inset-x-4 bottom-6 z-[100] flex justify-center px-2 pb-[env(safe-area-inset-bottom)]">
+      <div
+        role="status"
+        aria-live="polite"
+        className="flex w-full max-w-sm items-center gap-3 rounded-2xl border border-rose-200/70 bg-white/95 px-4 py-3 text-center shadow-[0_12px_40px_rgba(80,35,45,0.18)] backdrop-blur-md"
+      >
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-rose-50 text-xl text-rose-600">
+          ♥
+        </div>
+        <div className="min-w-0 flex-1 text-left">
+          <p className="text-sm font-semibold text-rose-950">
+            There&apos;s more to explore
+          </p>
+          <p className="mt-0.5 text-xs leading-relaxed text-stone-600">
+            Swipe up to discover their beautiful wedding moments.
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={() => setShowIOSPrompt(false)}
+          className="shrink-0 rounded-full px-2 py-2 text-xs font-semibold text-rose-700 transition hover:bg-rose-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-500"
+          aria-label="Dismiss scroll reminder"
+        >
+          Got it
+        </button>
+      </div>
+    </div>
+  );
 }
